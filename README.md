@@ -1,3 +1,5 @@
+# This repository is a fork of [File Finder](https://github.com/konkor/filefinder)
+
 # ![](/data/icons/filefinder.png) File Finder
 **File Finder** is an advanced native graphical file search tool and an integration with Gnome Nautilus file explorer through the Nautilus Extension.
 There is asynchronous threaded file search in multiple locations, a file masking, MIME types, modified dates, file sizes, text and binary patterns.
@@ -94,3 +96,4 @@ nautilus -q
 ## Screenshots
 
 ![](/data/screenshots/filefinder2.png?raw=true)
+
