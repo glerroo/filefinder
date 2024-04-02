@@ -21,7 +21,7 @@ using Gtk;
 
 static int main (string[] args) {
 
-	Filefinder.debugging = false;
+	// Filefinder.debugging = false;
 	string[] files = {};
 
 	foreach (string s in args) {
@@ -42,13 +42,13 @@ static int main (string[] args) {
 		}
 		else if (s == "--debug")
 		{
-			Filefinder.debugging = true;
+			// Filefinder.debugging = true;
 		} else {
 			files += s;
 		}
 	}
 
-	var app = new Filefinder (files);
+	// var app = new Filefinder (files);
 
-	return app.run (files);
+	return 0; // app.run (files);
 }
