@@ -32,18 +32,20 @@ public class Main : GLib.Object {
     private static bool version = false;
     private static bool license = false;
     private static bool debug = false;
-    private static string? directory = null;
+    [CCode (array_length = false, array_null_terminated = true)]
+	private static string[]? directories = null;
+    // private static string? directory = null;
 
     private const GLib.OptionEntry[] options = {
         { "version", 'v', GLib.OptionFlags.NONE, GLib.OptionArg.NONE, ref version, "Display version number", null },
         { "license", 'l', GLib.OptionFlags.NONE, GLib.OptionArg.NONE, ref license, "Display license", null },
         { "debug", 'd', GLib.OptionFlags.NONE, GLib.OptionArg.NONE, ref debug, "Print debug messages", null },
-        { GLib.OPTION_REMAINING, '\0', 0, GLib.OptionArg.FILENAME, ref directory, "Path file to search", "[PATH]" },
+        { GLib.OPTION_REMAINING, '\0', 0, GLib.OptionArg.FILENAME_ARRAY, ref directories, "Path file to search", "[PATH]" },
         { null }
     };
 
     static int main (string[] args) {
-        // Filefinder.debugging = false;
+        Filefinder.debugging = false;
 
         try {
             var opt_context = new GLib.OptionContext (null);
@@ -69,12 +71,12 @@ public class Main : GLib.Object {
         }
 
         if (debug) {
-            // Filefinder.debugging = true;
+            Filefinder.debugging = true;
         }
 
-       // var app = new Filefinder (directory);
+       var app = new Filefinder (/*directories*/);
 
-       return 0; // app.run (directory);
+       return app.run (directories);
     }
 }
 

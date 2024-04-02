@@ -31,7 +31,7 @@ filefinder_sources = [
   #'gui/toolbar.vala',
   #'gui/tool-button.vala',
 
-  #'filefinder.vala',
+  'filefinder.vala',
 ]
 
 filefinder_SOURCES = [
@@ -43,7 +43,9 @@ filefinder_deps = [
   glib_dep,
   gio_dep,
   gio_unix_dep,
-  gtk3_dep,
+  # gtk3_dep,
+  gtk4_dep,
+  adw1_dep,
   posix_dep,
 ]
 
