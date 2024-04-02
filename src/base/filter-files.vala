@@ -19,27 +19,27 @@
 
 public class FilterFiles : GLib.Object, iFilter {
 
-	public FilterFiles () {
-		_files = new GLib.List<string>();
-	}
+    public FilterFiles () {
+        _files = new GLib.List<string>();
+    }
 
-	public types filter_type () {
-		return types.FILES;
-	}
+    public types filter_type () {
+        return types.FILES;
+    }
 
-	private List<string> _files;
-	public List<string> files {
-		get {
-			return _files;
-		}
-	}
+    private List<string> _files;
+    public List<string> files {
+        get {
+            return _files;
+        }
+    }
 
-	public void add (string? path) {
-		if (path == null) return;
-		_files.append (path);
-	}
+    public void add (string? path) {
+        if (path == null) return;
+        _files.append (path);
+    }
 
-	public void clear () {
-		_files = new GLib.List<string>();
-	}
+    public void clear () {
+        _files = new GLib.List<string>();
+    }
 }

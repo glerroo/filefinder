@@ -19,47 +19,47 @@
 
 public class FilterText : GLib.Object, iFilter {
 
-	public FilterText () {
-	}
+    public FilterText () {
+    }
 
-	public types filter_type () {
-		return types.TEXT;
-	}
+    public types filter_type () {
+        return types.TEXT;
+    }
 
-	private string _text = "";
-	public string text {
-		get {
-			return _text;
-		}
-		set {
-			_text = value;
-		}
-	}
+    private string _text = "";
+    public string text {
+        get {
+            return _text;
+        }
+        set {
+            _text = value;
+        }
+    }
 
-	private string _enc = "UTF-8";
-	public string encoding {
-		get {
-			return _enc;
-		}
-		set {
-			_enc = value;
-		}
-	}
+    private string _enc = "UTF-8";
+    public string encoding {
+        get {
+            return _enc;
+        }
+        set {
+            _enc = value;
+        }
+    }
 
-	private bool _case = false;
-	public bool case_sensetive {
-		get {
-			return _case;
-		}
-		set {
-			_case = value;
-		}
-	}
+    private bool _case = false;
+    public bool case_sensetive {
+        get {
+            return _case;
+        }
+        set {
+            _case = value;
+        }
+    }
 
-	public bool is_utf8 {
-		get {
-			return encoding == "UTF-8";
-		}
-	}
+    public bool is_utf8 {
+        get {
+            return encoding == "UTF-8";
+        }
+    }
 
 }

@@ -19,29 +19,29 @@
 
 public class FilterMime : GLib.Object, iFilter {
 
-	public FilterMime () {
-		_mime = new GLib.List<string>();
-	}
+    public FilterMime () {
+        _mime = new GLib.List<string>();
+    }
 
-	public types filter_type () {
-		return types.MIMETYPE;
-	}
+    public types filter_type () {
+        return types.MIMETYPE;
+    }
 
-	private List<string> _mime;
-	public List<string> mime {
-		get {
-			return _mime;
-		}
-	}
+    private List<string> _mime;
+    public List<string> mime {
+        get {
+            return _mime;
+        }
+    }
 
-	public string name {get;set;}
+    public string name {get;set;}
 
-	public void add (string? mimetype) {
-		if (mimetype == null) return;
-		_mime.append (mimetype);
-	}
+    public void add (string? mimetype) {
+        if (mimetype == null) return;
+        _mime.append (mimetype);
+    }
 
-	public void clear () {
-		_mime = new GLib.List<string>();
-	}
+    public void clear () {
+        _mime = new GLib.List<string>();
+    }
 }

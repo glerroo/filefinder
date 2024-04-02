@@ -19,54 +19,54 @@
 
 public class FilterModified : GLib.Object, iFilter {
 
-	public FilterModified () {
-		DateTime d = new DateTime.now_utc();
-		_date = new DateTime.utc (d.get_year (),
-									d.get_month (),
-									d.get_day_of_month(),
-									0, 0, 0);
-	}
+    public FilterModified () {
+        DateTime d = new DateTime.now_utc();
+        _date = new DateTime.utc (d.get_year (),
+                                    d.get_month (),
+                                    d.get_day_of_month(),
+                                    0, 0, 0);
+    }
 
-	public types filter_type () {
-		return types.MODIFIED;
-	}
+    public types filter_type () {
+        return types.MODIFIED;
+    }
 
-	private date_operator _op = date_operator.EQUAL;
-	public date_operator operator {
-		get {
-			return _op;
-		}
-		set {
-			_op = value;
-		}
-	}
+    private date_operator _op = date_operator.EQUAL;
+    public date_operator operator {
+        get {
+            return _op;
+        }
+        set {
+            _op = value;
+        }
+    }
 
-	private DateTime _date;
-	public DateTime date {
-		get {
-			return _date;
-		}
-		set {
-			_date = value;
-		}
-	}
+    private DateTime _date;
+    public DateTime date {
+        get {
+            return _date;
+        }
+        set {
+            _date = value;
+        }
+    }
 
 }
 
 public enum date_operator {
-	NOT_EQUAL,
-	LESS,
-	LESS_EQUAL,
-	EQUAL,
-	MORE_EQUAL,
-	MORE
+    NOT_EQUAL,
+    LESS,
+    LESS_EQUAL,
+    EQUAL,
+    MORE_EQUAL,
+    MORE
 }
 
 public static const string[] date_operators = {
-	"not equal",
-	"less",
-	"less or equal",
-	"equal",
-	"more or equal",
-	"more"
+    "not equal",
+    "less",
+    "less or equal",
+    "equal",
+    "more or equal",
+    "more"
 };

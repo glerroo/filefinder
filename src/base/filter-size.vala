@@ -18,61 +18,61 @@
  */
 
 public class FilterSize : GLib.Object, iFilter {
-	public static uint[] WEIGHT = {1, 1024, 1048576, 1073741824};
+    public static uint[] WEIGHT = {1, 1024, 1048576, 1073741824};
 
-	public FilterSize () {
-	}
+    public FilterSize () {
+    }
 
-	public types filter_type () {
-		return types.SIZE;
-	}
+    public types filter_type () {
+        return types.SIZE;
+    }
 
-	private uint64 _size;
-	public uint64 size {
-		get {
-			return _size;
-		}
-		set {
-			_size = value;
-		}
-	}
+    private uint64 _size;
+    public uint64 size {
+        get {
+            return _size;
+        }
+        set {
+            _size = value;
+        }
+    }
 
-	public uint64 kib {
-		get {
-			return _size / WEIGHT[1];
-		}
-		set {
-			_size = value * WEIGHT[1];
-		}
-	}
+    public uint64 kib {
+        get {
+            return _size / WEIGHT[1];
+        }
+        set {
+            _size = value * WEIGHT[1];
+        }
+    }
 
-	public uint64 mib {
-		get {
-			return _size / WEIGHT[2];
-		}
-		set {
-			_size = value * WEIGHT[2];
-		}
-	}
+    public uint64 mib {
+        get {
+            return _size / WEIGHT[2];
+        }
+        set {
+            _size = value * WEIGHT[2];
+        }
+    }
 
-	public uint64 gib {
-		get {
-			return _size / WEIGHT[3];
-		}
-		set {
-			_size = value * WEIGHT[3];
-		}
+    public uint64 gib {
+        get {
+            return _size / WEIGHT[3];
+        }
+        set {
+            _size = value * WEIGHT[3];
+        }
 
-	}
+    }
 
-	private date_operator _op = date_operator.MORE;
-	public date_operator operator {
-		get {
-			return _op;
-		}
-		set {
-			_op = value;
-		}
-	}
+    private date_operator _op = date_operator.MORE;
+    public date_operator operator {
+        get {
+            return _op;
+        }
+        set {
+            _op = value;
+        }
+    }
 
 }

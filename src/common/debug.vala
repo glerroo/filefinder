@@ -19,73 +19,73 @@
 
 public class Debug : GLib.Object {
 
-	public static string last_error = "";
+    public static string last_error = "";
 
-	public static void log (string source,
-							string? output)
-	{
-		print_msg (domain.DEBUG, source, output);
-	}
+    public static void log (string source,
+                            string? output)
+    {
+        print_msg (domain.DEBUG, source, output);
+    }
 
-	public static void info (string source,
-							string? output)
-	{
-		print_msg (domain.INFO, source, output);
-	}
+    public static void info (string source,
+                            string? output)
+    {
+        print_msg (domain.INFO, source, output);
+    }
 
-	public static void error (string source,
-							string? output)
-	{
-		last_error = source + ":\n" + output;
-		print_msg (domain.ERROR, source, output);
-	}
+    public static void error (string source,
+                            string? output)
+    {
+        last_error = source + ":\n" + output;
+        print_msg (domain.ERROR, source, output);
+    }
 
-	public static void print_msg (domain _domain,
-									string source,
-									string? output)
-	{
-		if (Filefinder.debugging || (_domain == domain.ERROR)) {
-			DateTime now = new DateTime.now_local();
+    public static void print_msg (domain _domain,
+                                    string source,
+                                    string? output)
+    {
+        if (Filefinder.debugging || (_domain == domain.ERROR)) {
+            DateTime now = new DateTime.now_local();
 
-			stdout.printf ("\x1b[%sm[%02d:%02d:%02d.%06d %s] [%s]\x1b[0m %s\n", // http://ascii-table.com/ansi-escape-sequences.php
-						domain_color (_domain),
-						now.get_hour(),
-						now.get_minute(),
-						now.get_second(),
-						now.get_microsecond(),
-						domain_name (_domain).up(),
-						source,
-						output);
-		}
-	}
+            stdout.printf ("\x1b[%sm[%02d:%02d:%02d.%06d %s] [%s]\x1b[0m %s\n", // http://ascii-table.com/ansi-escape-sequences.php
+                        domain_color (_domain),
+                        now.get_hour(),
+                        now.get_minute(),
+                        now.get_second(),
+                        now.get_microsecond(),
+                        domain_name (_domain).up(),
+                        source,
+                        output);
+        }
+    }
 
-	public enum domain
-	{
-		ERROR, INFO, DEBUG;
-	}
+    public enum domain
+    {
+        ERROR, INFO, DEBUG;
+    }
 
-	private static string domain_color (domain _domain)
-	{
-		switch (_domain)
-		{
-			case domain.ERROR:		  return "00;31"; // Red
-			case domain.INFO:		   return "00;34"; // Blue
-			case domain.DEBUG:		  return "00;32"; // Green
+    private static string domain_color (domain _domain)
+    {
+        switch (_domain)
+        {
+            case domain.ERROR:        return "00;31"; // Red
+            case domain.INFO:          return "00;34"; // Blue
+            case domain.DEBUG:        return "00;32"; // Green
 
-			default:					return "0";
-		}
-	}
+            default:                    return "0";
+        }
+    }
 
-	private static string domain_name (domain _domain)
-	{
-		switch (_domain)
-		{
-			case domain.ERROR:		  return "Error";
-			case domain.INFO:		   return "Info";
-			case domain.DEBUG:		  return "Debug";
+    private static string domain_name (domain _domain)
+    {
+        switch (_domain)
+        {
+            case domain.ERROR:        return "Error";
+            case domain.INFO:          return "Info";
+            case domain.DEBUG:        return "Debug";
 
-			default:					return "Unknown";
-		}
-	}
+            default:                    return "Unknown";
+        }
+    }
 
 }

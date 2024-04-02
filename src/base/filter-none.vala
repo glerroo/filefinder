@@ -19,10 +19,10 @@
 
 public class FilterNone : GLib.Object, iFilter {
 
-	public FilterNone () {
-	}
+    public FilterNone () {
+    }
 
-	public types filter_type () {
-		return types.NONE;
-	}
+    public types filter_type () {
+        return types.NONE;
+    }
 }

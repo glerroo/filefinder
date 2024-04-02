@@ -19,30 +19,30 @@
 
 public class FilterLocation : Object, iFilter {
 
-	public FilterLocation () {
-	}
+    public FilterLocation () {
+    }
 
-	public types filter_type () {
-		return types.LOCATION;
-	}
+    public types filter_type () {
+        return types.LOCATION;
+    }
 
-	private string _path = "";
-	public string folder {
-		get {
-			return _path;
-		}
-		set {
-			_path = value;
-		}
-	}
+    private string _path = "";
+    public string folder {
+        get {
+            return _path;
+        }
+        set {
+            _path = value;
+        }
+    }
 
-	private bool _rec = true;
-	public bool recursive {
-		get {
-			return _rec;
-		}
-		set {
-			_rec = value;
-		}
-	}
+    private bool _rec = true;
+    public bool recursive {
+        get {
+            return _rec;
+        }
+        set {
+            _rec = value;
+        }
+    }
 }

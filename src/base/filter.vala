@@ -22,132 +22,132 @@ public interface iFilter : Object {
 }
 
 public class Filter {
-	private FilterNone none;
-	private FilterLocation location;
-	private FilterFiles file;
-	private FilterMask mask;
-	private FilterModified modified;
-	private FilterMime mime;
-	private FilterText text;
-	private FilterBin bin;
-	private FilterSize size;
+    private FilterNone none;
+    private FilterLocation location;
+    private FilterFiles file;
+    private FilterMask mask;
+    private FilterModified modified;
+    private FilterMime mime;
+    private FilterText text;
+    private FilterBin bin;
+    private FilterSize size;
 
-	public Filter () {
-		none = new FilterNone ();
-		_type = types.NONE;
-	}
+    public Filter () {
+        none = new FilterNone ();
+        _type = types.NONE;
+    }
 
-	private types _type;
-	public types filter_type {
-		get {
-			return _type;
-		}
-		set {
-			_type = value;
-		}
-	}
+    private types _type;
+    public types filter_type {
+        get {
+            return _type;
+        }
+        set {
+            _type = value;
+        }
+    }
 
-	public Object filter_value {
-		get {
-		switch (filter_type) {
-			case types.LOCATION:
-				return location;
-			case types.FILES:
-				return file;
-			case types.FILEMASK:
-				return mask;
-			case types.MIMETYPE:
-				return mime;
-			case types.TEXT:
-				return text;
-			case types.BINARY:
-				return bin;
-			case types.SIZE:
-				return size;
-			case types.MODIFIED:
-				return modified;
-			default:
-				return none;
-		}
-		}
-		set {
-		if (value == null) {
-			filter_type = types.NONE;
-			return;
-		}
-		//switch (value.get_type ().name ()) {
-		switch (((iFilter)value).filter_type ()) {
-			case types.LOCATION:
-				filter_type = types.LOCATION;
-				location =(FilterLocation) value;
-				break;
-			case types.FILES:
-				filter_type = types.FILES;
-				file =(FilterFiles) value;
-				break;
-			case types.FILEMASK:
-				filter_type = types.FILEMASK;
-				mask =(FilterMask) value;
-				break;
-			case types.MIMETYPE:
-				filter_type = types.MIMETYPE;
-				mime =(FilterMime) value;
-				break;
-			case types.TEXT:
-				filter_type = types.TEXT;
-				text =(FilterText) value;
-				break;
-			case types.BINARY:
-				filter_type = types.BINARY;
-				bin =(FilterBin) value;
-				break;
-			case types.SIZE:
-				filter_type = types.SIZE;
-				size =(FilterSize) value;
-				break;
-			case types.MODIFIED:
-				filter_type = types.MODIFIED;
-				modified =(FilterModified) value;
-				break;
-			default:
-				filter_type = types.NONE;
-				break;
-		}
-		}
-	}
+    public Object filter_value {
+        get {
+        switch (filter_type) {
+            case types.LOCATION:
+                return location;
+            case types.FILES:
+                return file;
+            case types.FILEMASK:
+                return mask;
+            case types.MIMETYPE:
+                return mime;
+            case types.TEXT:
+                return text;
+            case types.BINARY:
+                return bin;
+            case types.SIZE:
+                return size;
+            case types.MODIFIED:
+                return modified;
+            default:
+                return none;
+        }
+        }
+        set {
+        if (value == null) {
+            filter_type = types.NONE;
+            return;
+        }
+        //switch (value.get_type ().name ()) {
+        switch (((iFilter)value).filter_type ()) {
+            case types.LOCATION:
+                filter_type = types.LOCATION;
+                location =(FilterLocation) value;
+                break;
+            case types.FILES:
+                filter_type = types.FILES;
+                file =(FilterFiles) value;
+                break;
+            case types.FILEMASK:
+                filter_type = types.FILEMASK;
+                mask =(FilterMask) value;
+                break;
+            case types.MIMETYPE:
+                filter_type = types.MIMETYPE;
+                mime =(FilterMime) value;
+                break;
+            case types.TEXT:
+                filter_type = types.TEXT;
+                text =(FilterText) value;
+                break;
+            case types.BINARY:
+                filter_type = types.BINARY;
+                bin =(FilterBin) value;
+                break;
+            case types.SIZE:
+                filter_type = types.SIZE;
+                size =(FilterSize) value;
+                break;
+            case types.MODIFIED:
+                filter_type = types.MODIFIED;
+                modified =(FilterModified) value;
+                break;
+            default:
+                filter_type = types.NONE;
+                break;
+        }
+        }
+    }
 
 }
 
 public enum types {
-	LOCATION,
-	FILES,
-	FILEMASK,
-	MIMETYPE,
-	TEXT,
-	BINARY,
-	SIZE,
-	MODIFIED,
-	NONE
+    LOCATION,
+    FILES,
+    FILEMASK,
+    MIMETYPE,
+    TEXT,
+    BINARY,
+    SIZE,
+    MODIFIED,
+    NONE
 }
 
 public static const string[] type_names = {
-	"Folder",
-	"Files",
-	"Mask",
-	"Type",
-	"Text",
-	"Binary",
-	"Size",
-	"Modified"
+    "Folder",
+    "Files",
+    "Mask",
+    "Type",
+    "Text",
+    "Binary",
+    "Size",
+    "Modified"
 };
 
 public static const string[] type_tooltips = {
-	"Folder Location",
-	"Files Location",
-	"File Mask Filter",
-	"MIME Type Filter",
-	"Text Pattern",
-	"Binary Pattern",
-	"File Size Filter",
-	"Modified Date Filter"
+    "Folder Location",
+    "Files Location",
+    "File Mask Filter",
+    "MIME Type Filter",
+    "Text Pattern",
+    "Binary Pattern",
+    "File Size Filter",
+    "Modified Date Filter"
 };

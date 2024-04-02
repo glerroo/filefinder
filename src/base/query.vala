@@ -19,151 +19,151 @@
 
 public class Query : GLib.Object {
 
-	public List<FilterLocation> locations;
-	public List<string> files;
-	public List<FilterMask> masks;
-	public List<FilterModified> modifieds;
-	public List<string> mimes;
-	public List<FilterText> texts;
-	public List<FilterBin> bins;
-	public List<FilterSize> sizes;
+    public List<FilterLocation> locations;
+    public List<string> files;
+    public List<FilterMask> masks;
+    public List<FilterModified> modifieds;
+    public List<string> mimes;
+    public List<FilterText> texts;
+    public List<FilterBin> bins;
+    public List<FilterSize> sizes;
 
-	public bool apply_masks { get; set; }
+    public bool apply_masks { get; set; }
 
-	public Query () {
-		locations = new List<FilterLocation> ();
-		files = new List<string> ();
-		masks = new List<FilterMask> ();
-		modifieds = new List<FilterModified> ();
-		mimes = new List<string> ();
-		texts = new List<FilterText> ();
-		bins = new List<FilterBin> ();
-		sizes = new List<FilterSize> ();
-	}
+    public Query () {
+        locations = new List<FilterLocation> ();
+        files = new List<string> ();
+        masks = new List<FilterMask> ();
+        modifieds = new List<FilterModified> ();
+        mimes = new List<string> ();
+        texts = new List<FilterText> ();
+        bins = new List<FilterBin> ();
+        sizes = new List<FilterSize> ();
+    }
 
-	public void add_filter (Filter filter) {
-		if (filter == null) return;
-		switch (filter.filter_type) {
-			case types.LOCATION:
-				if (!location_exist ((FilterLocation)filter.filter_value))
-					locations.append ((FilterLocation)filter.filter_value);
-				break;
-			case types.FILES:
-				foreach (string s in ((FilterFiles)filter.filter_value).files) {
-					if (!file_exist (s))
-						files.append (s);
-				}
-				break;
-			case types.FILEMASK:
-				if (!mask_exist ((FilterMask)filter.filter_value))
-					masks.append ((FilterMask)filter.filter_value);
-				break;
-			case types.TEXT:
-				if (!text_exist ((FilterText)filter.filter_value))
-					texts.append ((FilterText)filter.filter_value);
-				break;
-			case types.MODIFIED:
-				if (!mod_exist ((FilterModified)filter.filter_value))
-					modifieds.append ((FilterModified)filter.filter_value);
-				break;
-			case types.BINARY:
-				if (!bin_exist ((FilterBin)filter.filter_value))
-					bins.append ((FilterBin)filter.filter_value);
-				break;
-			case types.MIMETYPE:
-				foreach (string s in ((FilterMime)filter.filter_value).mime) {
-					if (!mime_exist (s))
-						mimes.append (s);
-				}
-				//mimes.append ((FilterMime)filter.filter_value);
-				break;
-			case types.SIZE:
-				if (!size_exist ((FilterSize)filter.filter_value))
-					sizes.append ((FilterSize)filter.filter_value);
-				break;
-		}
-	}
+    public void add_filter (Filter filter) {
+        if (filter == null) return;
+        switch (filter.filter_type) {
+            case types.LOCATION:
+                if (!location_exist ((FilterLocation)filter.filter_value))
+                    locations.append ((FilterLocation)filter.filter_value);
+                break;
+            case types.FILES:
+                foreach (string s in ((FilterFiles)filter.filter_value).files) {
+                    if (!file_exist (s))
+                        files.append (s);
+                }
+                break;
+            case types.FILEMASK:
+                if (!mask_exist ((FilterMask)filter.filter_value))
+                    masks.append ((FilterMask)filter.filter_value);
+                break;
+            case types.TEXT:
+                if (!text_exist ((FilterText)filter.filter_value))
+                    texts.append ((FilterText)filter.filter_value);
+                break;
+            case types.MODIFIED:
+                if (!mod_exist ((FilterModified)filter.filter_value))
+                    modifieds.append ((FilterModified)filter.filter_value);
+                break;
+            case types.BINARY:
+                if (!bin_exist ((FilterBin)filter.filter_value))
+                    bins.append ((FilterBin)filter.filter_value);
+                break;
+            case types.MIMETYPE:
+                foreach (string s in ((FilterMime)filter.filter_value).mime) {
+                    if (!mime_exist (s))
+                        mimes.append (s);
+                }
+                //mimes.append ((FilterMime)filter.filter_value);
+                break;
+            case types.SIZE:
+                if (!size_exist ((FilterSize)filter.filter_value))
+                    sizes.append ((FilterSize)filter.filter_value);
+                break;
+        }
+    }
 
-	private bool location_exist (FilterLocation f) {
-		foreach (FilterLocation p in locations) {
-			if (p.folder == f.folder) {
-				if (p.recursive != f.recursive) {
-					p.recursive = true;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool location_exist (FilterLocation f) {
+        foreach (FilterLocation p in locations) {
+            if (p.folder == f.folder) {
+                if (p.recursive != f.recursive) {
+                    p.recursive = true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private bool file_exist (string file) {
-		foreach (string s in files) {
-			if (s == file) return true;
-		}
-		return false;
-	}
+    private bool file_exist (string file) {
+        foreach (string s in files) {
+            if (s == file) return true;
+        }
+        return false;
+    }
 
-	private bool mask_exist (FilterMask f) {
-		foreach (FilterMask p in masks) {
-			if (p.mask == null) return true;
-			if (p.mask.length == 0) return true;
-			if (p.mask == f.mask) {
-				if (p.case_sensetive != f.case_sensetive) {
-					p.case_sensetive = false;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool mask_exist (FilterMask f) {
+        foreach (FilterMask p in masks) {
+            if (p.mask == null) return true;
+            if (p.mask.length == 0) return true;
+            if (p.mask == f.mask) {
+                if (p.case_sensetive != f.case_sensetive) {
+                    p.case_sensetive = false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private bool text_exist (FilterText f) {
-		if (f.text.length == 0) return true;
-		foreach (FilterText p in texts) {
-			if (p.text == null) return true;
-			if (p.text.length == 0) return true;
-			if ((p.text == f.text) && (p.is_utf8 == f.is_utf8)){
-				if (p.case_sensetive != f.case_sensetive) {
-					p.case_sensetive = false;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool text_exist (FilterText f) {
+        if (f.text.length == 0) return true;
+        foreach (FilterText p in texts) {
+            if (p.text == null) return true;
+            if (p.text.length == 0) return true;
+            if ((p.text == f.text) && (p.is_utf8 == f.is_utf8)){
+                if (p.case_sensetive != f.case_sensetive) {
+                    p.case_sensetive = false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private bool mod_exist (FilterModified f) {
-		foreach (FilterModified p in modifieds) {
-			if ((p.date.compare (f.date) == 0) && (p.operator == f.operator)){
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool mod_exist (FilterModified f) {
+        foreach (FilterModified p in modifieds) {
+            if ((p.date.compare (f.date) == 0) && (p.operator == f.operator)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private bool bin_exist (FilterBin f) {
-		if (f.bin.length == 0) return true;
-		foreach (FilterBin p in bins) {
-			if (p.bin == f.bin){
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool bin_exist (FilterBin f) {
+        if (f.bin.length == 0) return true;
+        foreach (FilterBin p in bins) {
+            if (p.bin == f.bin){
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private bool mime_exist (string m) {
-		foreach (string s in mimes) {
-			if (s == m) return true;
-		}
-		return false;
-	}
+    private bool mime_exist (string m) {
+        foreach (string s in mimes) {
+            if (s == m) return true;
+        }
+        return false;
+    }
 
-	private bool size_exist (FilterSize f) {
-		foreach (FilterSize p in sizes) {
-			if ((p.size == f.size) && (p.operator == f.operator)){
-				return true;
-			}
-		}
-		return false;
-	}
+    private bool size_exist (FilterSize f) {
+        foreach (FilterSize p in sizes) {
+            if ((p.size == f.size) && (p.operator == f.operator)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

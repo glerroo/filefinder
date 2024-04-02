@@ -19,39 +19,39 @@
 
 public class InputDialog : Gtk.Dialog {
 
-	public Gtk.Label label;
-	public Gtk.Entry entry;
+    public Gtk.Label label;
+    public Gtk.Entry entry;
 
-	public InputDialog (Gtk.Window? w = null) {
-		set_transient_for (w);
-		title = Text.app_name;
-		add_button ("_Cancel", Gtk.ResponseType.CANCEL);
-		add_button ("_OK", Gtk.ResponseType.ACCEPT);
-		set_default_size (512, 140);
-		Gtk.Box content = get_content_area () as Gtk.Box;
-		content.border_width = 8;
-		content.spacing = 6;
+    public InputDialog (Gtk.Window? w = null) {
+        set_transient_for (w);
+        title = Text.app_name;
+        add_button ("_Cancel", Gtk.ResponseType.CANCEL);
+        add_button ("_OK", Gtk.ResponseType.ACCEPT);
+        set_default_size (512, 140);
+        Gtk.Box content = get_content_area () as Gtk.Box;
+        content.border_width = 8;
+        content.spacing = 6;
 
-		label = new Gtk.Label (null);
-		label.xalign = 0;
-		content.add (label);
+        label = new Gtk.Label (null);
+        label.xalign = 0;
+        content.add (label);
 
-		entry = new Gtk.Entry ();
-		entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "edit-clear");
-		entry.icon_press.connect ((pos, event) => {
-			if (pos == Gtk.EntryIconPosition.SECONDARY) {
-				entry.set_text ("");
-			}
-		});
-		entry.key_press_event.connect ((event) => {
-			if (event.keyval == Gdk.Key.Return) {
-				response (Gtk.ResponseType.ACCEPT);
-				return true;
-			}
-			return false;
-		});
-		content.add (entry);
+        entry = new Gtk.Entry ();
+        entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "edit-clear");
+        entry.icon_press.connect ((pos, event) => {
+            if (pos == Gtk.EntryIconPosition.SECONDARY) {
+                entry.set_text ("");
+            }
+        });
+        entry.key_press_event.connect ((event) => {
+            if (event.keyval == Gdk.Key.Return) {
+                response (Gtk.ResponseType.ACCEPT);
+                return true;
+            }
+            return false;
+        });
+        content.add (entry);
 
-		show_all ();
-	}
+        show_all ();
+    }
 }

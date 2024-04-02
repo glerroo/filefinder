@@ -19,21 +19,21 @@
 
 public class FilterBin : GLib.Object, iFilter {
 
-	public FilterBin () {
-	}
+    public FilterBin () {
+    }
 
-	public types filter_type () {
-		return types.BINARY;
-	}
+    public types filter_type () {
+        return types.BINARY;
+    }
 
-	private string _bin = "";
-	public string bin {
-		get {
-			return _bin;
-		}
-		set {
-			_bin = value;
-		}
-	}
+    private string _bin = "";
+    public string bin {
+        get {
+            return _bin;
+        }
+        set {
+            _bin = value;
+        }
+    }
 
 }

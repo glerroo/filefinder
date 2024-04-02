@@ -18,17 +18,17 @@
  */
 
 public class ColumnMenuItem : Gtk.CheckMenuItem {
-	private int _id = -1;
+    private int _id = -1;
 
-	public ColumnMenuItem (ViewColumn column) {
-		_id = column.id;
-		label = " " + column.title;
-	}
+    public ColumnMenuItem (ViewColumn column) {
+        _id = column.id;
+        label = " " + column.title;
+    }
 
-	public int column_id {
-		get {
-			return _id;
-		}
-	}
+    public int column_id {
+        get {
+            return _id;
+        }
+    }
 
 }

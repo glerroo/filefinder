@@ -19,30 +19,30 @@
 
 public class FilterMask : GLib.Object, iFilter {
 
-	public FilterMask () {
-	}
+    public FilterMask () {
+    }
 
-	public types filter_type () {
-		return types.FILEMASK;
-	}
+    public types filter_type () {
+        return types.FILEMASK;
+    }
 
-	private string _mask = "";
-	public string mask {
-		get {
-			return _mask;
-		}
-		set {
-			_mask = value;
-		}
-	}
+    private string _mask = "";
+    public string mask {
+        get {
+            return _mask;
+        }
+        set {
+            _mask = value;
+        }
+    }
 
-	private bool _case = false;
-	public bool case_sensetive {
-		get {
-			return _case;
-		}
-		set {
-			_case = value;
-		}
-	}
+    private bool _case = false;
+    public bool case_sensetive {
+        get {
+            return _case;
+        }
+        set {
+            _case = value;
+        }
+    }
 }

@@ -18,33 +18,33 @@
  */
 
 public class MenuItemIndex : Gtk.ImageMenuItem {
-	private int _id = -1;
+    private int _id = -1;
 
-	public MenuItemIndex (int index = -1, string text = "") {
-		_id = index;
-		label = text;
-	}
+    public MenuItemIndex (int index = -1, string text = "") {
+        _id = index;
+        label = text;
+    }
 
-	public int id {
-		get {
-			return _id;
-		}
-	}
+    public int id {
+        get {
+            return _id;
+        }
+    }
 
-	public void set_accel (string hotkey) {
-		uint key;
-		Gdk.ModifierType mods;
-		if (hotkey.length == 0) return;
-		Gtk.accelerator_parse (hotkey, out key, out mods); 
-		var child = get_child ();
-		(child as Gtk.AccelLabel).set_accel (key, mods);
-	}
+    public void set_accel (string hotkey) {
+        uint key;
+        Gdk.ModifierType mods;
+        if (hotkey.length == 0) return;
+        Gtk.accelerator_parse (hotkey, out key, out mods); 
+        var child = get_child ();
+        (child as Gtk.AccelLabel).set_accel (key, mods);
+    }
 
-	public void set_markup (string text) {
-		if (text.length == 0) return;
-		var child = get_child ();
-		(child as Gtk.Label).set_markup (text);
-	}
+    public void set_markup (string text) {
+        if (text.length == 0) return;
+        var child = get_child ();
+        (child as Gtk.Label).set_markup (text);
+    }
 
 }
 

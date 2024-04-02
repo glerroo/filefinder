@@ -19,60 +19,60 @@
 
 public class FilterBar : Gtk.ScrolledWindow {
 
-	private Filter _filter;
-	public Filter filter {
-		get {
-			return _filter;
-		}
-	}
+    private Filter _filter;
+    public Filter filter {
+        get {
+            return _filter;
+        }
+    }
 
-	public FilterBar () {
-		vscrollbar_policy = Gtk.PolicyType.AUTOMATIC;
-		hscrollbar_policy = Gtk.PolicyType.NEVER;
-		shadow_type = Gtk.ShadowType.NONE;
-		_filter = new Filter ();
-		margin = 6;
-		//get_style_context ().add_class ("primary-toolbar");
+    public FilterBar () {
+        vscrollbar_policy = Gtk.PolicyType.AUTOMATIC;
+        hscrollbar_policy = Gtk.PolicyType.NEVER;
+        shadow_type = Gtk.ShadowType.NONE;
+        _filter = new Filter ();
+        margin = 6;
+        //get_style_context ().add_class ("primary-toolbar");
 
-		build ();
-		//show_all ();
-	}
+        build ();
+        //show_all ();
+    }
 
-	private void build () {
-		Gtk.Box box;
-		//Gtk.Label label;
-		FilterButton btn;
+    private void build () {
+        Gtk.Box box;
+        //Gtk.Label label;
+        FilterButton btn;
 
-		box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 4);
-		add (box);
-		/*label = new Gtk.Label ("<b>+</b>");
-		label.set_use_markup (true);
-		box.add (label);*/
-		for (int i = 0; i < types.NONE; i++) {
-			btn = new FilterButton (type_names[i], i);
-			btn.tooltip_text = "Add " + type_tooltips[i];
-			btn.clicked.connect ((o)=>{
-				if (Filefinder.window == null) return;
-				Filefinder.window.add_filter ((types)(o as FilterButton).id);
-			});
-			box.add (btn);
-		}
-	}
+        box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 4);
+        add (box);
+        /*label = new Gtk.Label ("<b>+</b>");
+        label.set_use_markup (true);
+        box.add (label);*/
+        for (int i = 0; i < types.NONE; i++) {
+            btn = new FilterButton (type_names[i], i);
+            btn.tooltip_text = "Add " + type_tooltips[i];
+            btn.clicked.connect ((o)=>{
+                if (Filefinder.window == null) return;
+                Filefinder.window.add_filter ((types)(o as FilterButton).id);
+            });
+            box.add (btn);
+        }
+    }
 }
 
 public class FilterButton : Gtk.Button {
-	private int _id = -1;
+    private int _id = -1;
 
-	public FilterButton (string text = "", int id = -1) {
-		margin = 4;
-		label = text;
-		_id = id;
-	}
+    public FilterButton (string text = "", int id = -1) {
+        margin = 4;
+        label = text;
+        _id = id;
+    }
 
-	public int id {
-		get {
-			return _id;
-		}
-	}
+    public int id {
+        get {
+            return _id;
+        }
+    }
 
 }
