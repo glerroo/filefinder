@@ -40,9 +40,9 @@ public class Filefinder : Adw.Application
     public Filefinder (/*string[] args*/) {
         GLib.Object (application_id: "org.konkor.filefinder",
             flags: ApplicationFlags.HANDLES_OPEN);
-    // 	uris = new List<string>();
-    // 	int i, count = args.length;
-    // 	for (i = 1; i < count; i++) {
+    //  uris = new List<string>();
+    //  int i, count = args.length;
+    //  for (i = 1; i < count; i++) {
     //      switch (args[i]) {
     //          case "--help":
     //          case "--version":
@@ -51,22 +51,21 @@ public class Filefinder : Adw.Application
     //              break;
     //          default:
     //              uris have to process in the open handler
-    // 	        break;
+    //          break;
     //      }
     //  }
     //     self = this;
     }
 
     construct {
-        // GLib.ActionEntry[] action_entries = {
+        GLib.ActionEntry[] action_entries = {
             // {"about", about_cb},
             // {"preferences", preferences_cb},
-            // {"quit", quit_cb},
+            {"quit", this.quit},
             // {"add_location", add_location_cb},
             // {"toggle_paned", toggle_paned_cb}
-
-        // };
-        // this.add_action_entries (action_entries, this);
+        };
+        this.add_action_entries (action_entries, this);
         this.set_accels_for_action ("app.quit", {"<primary>q"});
     }
 
@@ -95,41 +94,47 @@ public class Filefinder : Adw.Application
         // window.show_all ();
         // window.post_init ();
         // window.go_clicked.connect ((q)=>{
-        // 	if (window.get_window () == null) return;
-        // 	Debug.info ("loc count", "%u".printf (q.locations.length ()));
-        // 	Debug.info ("file count", "%u".printf (q.files.length ()));
-        // 	Debug.info ("mask count", "%u".printf (q.masks.length ()));
-        // 	Debug.info ("mime count", "%u".printf (q.mimes.length ()));
-        // 	Debug.info ("mod count", "%u".printf (q.modifieds.length ()));
-        // 	Debug.info ("text count", "%u".printf (q.texts.length ()));
-        // 	Debug.info ("bin count", "%u".printf (q.bins.length ()));
-        // 	Debug.info ("size count", "%u".printf (q.sizes.length ()));
-        // 	service = new Service ();
-        // 	window.result_view.connect_model ();
-        // 	service.finished_search.connect (()=>{
-        // 		window.show_results ();
-        // 	});
-        // 	service.row_changed.connect(()=>{window.set_subtitle ();});
-        // 	window.canceled.connect (()=>{
-        // 		service.cancel ();
-        // 	});
-        // 	service.start (q);
+        //  if (window.get_window () == null) return;
+        //  Debug.info ("loc count", "%u".printf (q.locations.length ()));
+        //  Debug.info ("file count", "%u".printf (q.files.length ()));
+        //  Debug.info ("mask count", "%u".printf (q.masks.length ()));
+        //  Debug.info ("mime count", "%u".printf (q.mimes.length ()));
+        //  Debug.info ("mod count", "%u".printf (q.modifieds.length ()));
+        //  Debug.info ("text count", "%u".printf (q.texts.length ()));
+        //  Debug.info ("bin count", "%u".printf (q.bins.length ()));
+        //  Debug.info ("size count", "%u".printf (q.sizes.length ()));
+        //  service = new Service ();
+        //  window.result_view.connect_model ();
+        //  service.finished_search.connect (()=>{
+        //      window.show_results ();
+        //  });
+        //  service.row_changed.connect(()=>{window.set_subtitle ();});
+        //  window.canceled.connect (()=>{
+        //      service.cancel ();
+        //  });
+        //  service.start (q);
         // });
         //window.add_locations (uris);
         // open.connect ((files) => {
-        // 	foreach (File f in files) {
-        // 		if (f.query_exists ()) uris.append (f.get_path());
-        // 	}
-        // 	if ((window.get_window () != null) && (uris.length() > 0))
-        // 		window.add_locations (uris);
+        //  foreach (File f in files) {
+        //      if (f.query_exists ()) uris.append (f.get_path());
+        //  }
+        //  if ((window.get_window () != null) && (uris.length() > 0))
+        //      window.add_locations (uris);
         // });
         // preferences.load_plugs ();
         // window.enable_toolbar ();
     }
 
-    // protected override void activate () {
-    // 	window.present ();
-    // }
+
+    protected override void activate () {
+        base.activate ();
+        var window = this.active_window;
+        if (window == null) {
+            window = new FileFinderWindow (this);
+        }
+        window.present ();
+    }
 
     // private void quit_cb () {
     //     exit ();

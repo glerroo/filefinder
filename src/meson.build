@@ -18,7 +18,7 @@ filefinder_sources = [
 
   #'gui/column-menu-item.vala',
   #'gui/dialog-mime-chooser.vala',
-  #'gui/file-finder-window.vala',
+  'gui/file-finder-window.vala',
   #'gui/filter-bar.vala',
   #'gui/input-dialog.vala',
   #'gui/menu-item-id.vala',
