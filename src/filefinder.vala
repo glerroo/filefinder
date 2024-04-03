@@ -59,7 +59,7 @@ public class Filefinder : Adw.Application
 
     construct {
         GLib.ActionEntry[] action_entries = {
-            // {"about", about_cb},
+            {"about", on_about_action},
             // {"preferences", preferences_cb},
             {"quit", this.quit},
             // {"add_location", add_location_cb},
@@ -166,22 +166,25 @@ public class Filefinder : Adw.Application
     //     about ();
     // }
 
-    // public static void about () {
-    //     string[] authors = {
-    //       "Kostiantyn Korienkov",
-    //       null
-    //     };
-    //     Gtk.show_about_dialog (window,
-    //                         "name", Text.app_name,
-    //                         "copyright", Text.app_copyright,
-    //                         "license-type", Gtk.License.GPL_3_0,
-    //                         "authors", authors,
-    //                         "website", Text.app_website,
-    //                         "website-label", Text.app_name,
-    //                         "version", Text.app_version,
-    //                         "logo_icon_name", "filefinder",
-    //                         null);
-    // }
+    private void on_about_action () {
+        string[] developers = { "Gianni Lerro <glerro.pm.me>",
+            "Kostiantyn Korienkov <kkorienkov [at] gmail.com>" };
+        var about = new Adw.AboutWindow () {
+            transient_for = this.active_window,
+            application_name = Text.app_name,
+            application_icon = "filefinder",
+            developer_name = "Gianni Lerro",
+            version = Text.app_version,
+            developers = developers,
+            license_type = Gtk.License.GPL_3_0,
+            copyright = "Copyright © 2016 Kostiantyn Korienkov\nCopyright © 2024 Gianni Lerro",
+            website = "https://gitlab.gnome.org/glerro/filefinder",
+            issue_url = "https://gitlab.gnome.org/glerro/filefinder/issues",
+            comments = "File Finder is lightweight find tool",
+        };
+
+        about.present ();
+    }
 
     // public static bool exist (string filepath) {
     //     GLib.File file = File.new_for_path (filepath.strip ());
