@@ -32,7 +32,7 @@ public class Filefinder : Adw.Application
 {
     public static bool debugging;
     // public static FileFinderWindow? window = null;
-    // public static Preferences preferences;
+    public static Preferences preferences;
     // public static Service service;
     // public static Filefinder self;
     // public static List<string> uris;
@@ -60,7 +60,7 @@ public class Filefinder : Adw.Application
     construct {
         GLib.ActionEntry[] action_entries = {
             {"about", on_about_action},
-            // {"preferences", preferences_cb},
+            {"preferences", on_preferences_action},
             {"quit", this.quit},
             // {"add_location", add_location_cb},
             // {"toggle_paned", toggle_paned_cb}
@@ -87,7 +87,9 @@ public class Filefinder : Adw.Application
 
         // Environment.set_application_name (Text.app_name);
 
-        // preferences = new Preferences ();
+        preferences = new Preferences ();
+        // preferences.transient_for = this.active_window;
+
         // service = new Service ();
 
         // window = new FileFinderWindow (this);
@@ -184,6 +186,10 @@ public class Filefinder : Adw.Application
         };
 
         about.present ();
+    }
+
+    private void on_preferences_action () {
+        preferences.present (this.active_window);
     }
 
     // public static bool exist (string filepath) {
