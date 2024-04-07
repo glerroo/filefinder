@@ -47,40 +47,58 @@ public class NewItemModel : GLib.Object, GLib.ListModel  {
 }
 
 public class ExcludedLocationListModel : GLib.Object, GLib.ListModel {
+    private GLib.Settings settings;
     private Gtk.StringList _items;
-    private Array<string> _names;
 
     public ExcludedLocationListModel () {
+        this.settings = new GLib.Settings ("org.konkor.filefinder");
+        this._items = new Gtk.StringList (this.settings.get_strv("excluded-location"));
 
-        this._names = new Array<string> ();
-        this._items = new Gtk.StringList (_names.data);
+        this.settings.changed.connect ( (key) => {
+            if (key == "excluded-location") {
+                uint removed = this._items.get_n_items ();
+                string[] _names = this.settings.get_strv("excluded-location");
+                this._items.splice(0, removed, _names);
+                this.items_changed(0, removed, _names.length);
+            }
+        });
+    }
+
+    private string[] get_strings (Gtk.StringList items) {
+        string[]? strings = {};
+
+        for (uint i = 0; i < items.get_n_items (); i++) {
+            strings += items.get_string (i);
+        }
+
+        return strings;
     }
 
     public void append (string name) {
-        this._names.append_val (name);
 
         var pos = this._items.get_n_items();
         this._items.append (name);
         this.items_changed (pos, 0, 1);
+
+        this.settings.set_strv("excluded-location", get_strings(this._items));
         return;
     }
 
     public void remove (string name) {
         var pos = -1;
 
-        for (int i = 0; i < this._names.length; i++) {
-            if (this._names.index(i) == name)
+        for (int i = 0; i < this._items.get_n_items (); i++) {
+            if ((string) this._items.get_string (i) == name)
                 pos = i;
         }
-        print ("Name: %s\n", name);
-        print ("Pos: %i\n", pos);
+
         if (pos < 0)
             return;
 
-        this._names .remove_index (pos);
-
         this._items.remove (pos);
         this.items_changed (pos, 1, 0);
+
+        this.settings.set_strv("excluded-location", get_strings(this._items));
         return;
     }
 
@@ -201,9 +219,6 @@ public class ExcludedLocationListBox : Gtk.Widget {
 
         GLib.SimpleAction action2 = new GLib.SimpleAction ("remove", new GLib.VariantType("s"));
         action2.activate.connect((param) => {
-            print("\nRemove: ");
-            print(param.get_string ());
-            print("\n");
             el_listmodel.remove(param.get_string ());
         });
         actionGroup.add_action (action2);

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- -*- Mode: Xml; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */ -->
+
+<!-- This file is part of File Finder. -->
+<!-- https://gitlab.gnome.org/glerro/filefinder -->
+
+<!-- excluded-location-list-box.vala -->
+
+<!-- Copyright (c) 2024 Gianni Lerro {glerro} ~ <glerro@pm.me> -->
+
+<!-- File Finder is free software: you can redistribute it and/or -->
+<!-- modify it under the terms of the GNU General Public License as published by the -->
+<!-- Free Software Foundation, either version 3 of the License, or -->
+<!-- (at your option) any later version. -->
+
+<!-- File Finder is distributed in the hope that it will be useful, -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. -->
+<!-- See the GNU General Public License for more details. -->
+
+<!-- You should have received a copy of the GNU General Public License along -->
+<!-- with File Finder. If not, see <https://www.gnu.org/licenses/>. -->
+
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2024 Gianni Lerro <glerro@pm.me> -->
+
+<schemalist gettext-domain="konkor-filefinder">
+  <schema id="org.konkor.filefinder" path="/org/konkor/filefinder/" >
+    <!-- Application Settings-->
+    <key type="b" name="first-run">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="window-maximized">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="i" name="window-width">
+      <default>800</default>
+      <summary>Interval between updates check</summary>
+      <description>Time to wait between two automatic checks</description>
+      <!-- <range min="800"/> -->
+    </key>
+    <key type="i" name="window-height">
+      <default>600</default>
+      <summary>Interval between updates check</summary>
+      <description>Time to wait between two automatic checks</description>
+      <!-- <range min="600"/> -->
+    </key>
+<!-- 0 geometry 215 123 1312 783 false 340 -->
+
+    <!-- General Preferences -->
+    <key type="b" name="check-mounts">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="check-links">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="check-hidden">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="check-backup">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="as" name="excluded-location">
+      <default>[]</default>
+      <summary>Packages to ignore list</summary>
+      <description>A list of packages to ignore for updates.</description>
+    </key>
+<!-- 0 excluded /home/glerro/.config/ulauncher -->
+<!-- 0 excluded /home/glerro/.local/share/gnome-shell -->
+
+    <!-- Interface Preferences -->
+    <key type="b" name="split-orientation">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="check-autohide">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="cb-dark">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="cb-single">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="i" name="spin-rows">
+      <default>1</default>
+      <summary>Interval between updates check</summary>
+      <description>Time to wait between two automatic checks</description>
+      <range min="1" max="50"/>
+    </key>
+    <key type="b" name="show-result-name">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-size">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-type">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-mod">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-permissions">
+      <default>false</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-mime">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-path">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-position">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="show-result-row">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+<!-- 1 name 0:354:true -->
+<!-- 1 size 1:72:true -->
+<!-- 1 type 2:60:true -->
+<!-- 1 mod 3:164:true -->
+<!-- 1 permissions 4:60:true -->
+<!-- 1 mime 5:128:true -->
+<!-- 1 path 6:650:true -->
+<!-- 1 position 7:64:true -->
+<!-- 1 row 8:591:true -->
+
+<!-- Mime Preferences -->
+<!-- 2 New%20Group application/gnunet-directory application/ecmascript application/dicom -->
+<!-- 2 New%20Group2 application/gml+xml application/geo+json application/com.github.phase1geo.minder -->
+
+    <!-- Plugins Preferences -->
+    <key type="b" name="show-toolbar">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="toolbar-groups">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+    <key type="b" name="toolbar-shortcuts">
+      <default>true</default>
+      <summary>Show the output of the upgrade process on a terminal window</summary>
+      <description>This is a safer way of upgrading packages.</description>
+    </key>
+
+    <!-- <key type="as" name="debian-updates-indicator-shortcut"> -->
+    <!--   <default><![CDATA[['<Super>i']]]></default> -->
+    <!--   <summary>Keybinding to open the indicator.</summary> -->
+    <!--   <description>If showing, the indicator menu is toggled.</description> -->
+    <!-- </key> -->
+    <!-- <key type="s" name="check-cmd-custom"> -->
+    <!--   <default>"pkexec apt update"</default> -->
+    <!--   <summary>Custom command to run to check for updates</summary> -->
+    <!--   <description>Command to run to check for updates.</description> -->
+    <!-- </key> -->
+    <!-- <key type="d" name="last-check-date-double"> -->
+    <!--   <default>0</default> -->
+    <!--   <summary>Date and time of the last time a check for updates was run.</summary> -->
+    <!--   <description>This is stored and used on the next boot.</description> -->
+    <!-- </key> -->
+
+  </schema>
+</schemalist>
+

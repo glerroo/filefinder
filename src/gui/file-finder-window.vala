@@ -29,11 +29,18 @@
  */
 
 public class FileFinderWindow : Adw.ApplicationWindow {
+    private GLib.Settings settings;
     // public signal void go_clicked (Query q);
     // public signal void canceled ();
 
     public FileFinderWindow (Gtk.Application app) {
         GLib.Object (application: app);
+
+        this.settings = new GLib.Settings ("org.konkor.filefinder");
+        this.settings.bind ("window-height", this, "default_height", GLib.SettingsBindFlags.DEFAULT);
+        this.settings.bind ("window-width", this, "default_width", GLib.SettingsBindFlags.DEFAULT);
+        this.settings.bind ("window-maximized", this, "maximized", GLib.SettingsBindFlags.DEFAULT);
+
         build ();
         // initialize ();
     }
@@ -63,8 +70,6 @@ public class FileFinderWindow : Adw.ApplicationWindow {
     // public Gtk.CheckMenuItem cmi;
 
     protected void build () {
-        this.default_height = 400;
-        this.default_width = 600;
 
         // accel_group = new AccelGroup ();
         // this.add_accel_group (accel_group);
@@ -197,6 +202,9 @@ public class FileFinderWindow : Adw.ApplicationWindow {
         //var label = new Label("<b>No search results.</b>");
         //label.use_markup = true;
         //empty_box.pack_start (label, true, true, 0);
+
+        var ss = new Adw.OverlaySplitView ();
+        tv.set_content (ss);
 
         // paned = new Gtk.Paned (Filefinder.preferences.split_orientation);
         // paned.can_focus = true;

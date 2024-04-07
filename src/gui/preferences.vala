@@ -52,6 +52,8 @@ public class Preferences : Adw.PreferencesDialog {
     // ViewColumn() { id = 7, name = "position", title = "Position", width = 64, visible = true },
     // ViewColumn() { id = 8, name = "row", title = "Content", width = 240, visible = true }
     // };
+    //
+    private GLib.Settings settings;
 
     public bool is_changed = false;
     // public bool first_run = true;
@@ -66,6 +68,8 @@ public class Preferences : Adw.PreferencesDialog {
     public Preferences () {
         this.title = Text.app_name + " Preferences";
         // _mime_count = _mime_type_groups.length;
+        // this.settings = _settings;
+        this.settings = new GLib.Settings ("org.konkor.filefinder");
 
         build_gui ();
         // load ();
@@ -573,21 +577,25 @@ public class Preferences : Adw.PreferencesDialog {
         cb_mounts.set_title ("Exclude mount points");
         cb_mounts.set_active (true);
         group.add (cb_mounts);
+        this.settings.bind ("check-mounts", cb_mounts, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_links = new Adw.SwitchRow ();
         cb_links.set_title ("Don't follow to symbolic links");
         cb_links.set_active (false);
         group.add (cb_links);
+        this.settings.bind ("check-links", cb_links, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_hidden = new Adw.SwitchRow ();
         cb_hidden.set_title ("Exclude hidden locations");
         cb_hidden.set_active (true);
         group.add (cb_hidden);
+        this.settings.bind ("check-hidden", cb_hidden, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_backup = new Adw.SwitchRow ();
         cb_backup.set_title ("Exclude backups");
         cb_backup.set_active (false);
         group.add (cb_backup);
+        this.settings.bind ("check-backup", cb_backup, "active", GLib.SettingsBindFlags.DEFAULT);
 
         cb_mounts.activated.connect (()=>{
             check_mounts = cb_mounts.active;
@@ -692,27 +700,32 @@ public class Preferences : Adw.PreferencesDialog {
         cb_vertical.set_subtitle ("Setting Split Orientation of the Results View");
         cb_vertical.set_active (true);
         group_a.add (cb_vertical);
+        this.settings.bind ("split-orientation", cb_vertical, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_autohide = new Adw.SwitchRow ();
         cb_autohide.set_title ("Autohide The Filter Panel On Results");
         cb_autohide.set_active (false);
         group_a.add (cb_autohide);
+        this.settings.bind ("check-autohide", cb_autohide, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_dark = new Adw.SwitchRow ();
         cb_dark.set_title ("Dark");
         cb_dark.set_active (false);
         group_a.add (cb_dark);
+        this.settings.bind ("cb-dark", cb_dark, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow cb_single = new Adw.SwitchRow ();
         cb_single.set_title ("Single Filter Per Row");
         cb_single.set_active (true);
         group_a.add (cb_single);
+        this.settings.bind ("cb-single", cb_single, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SpinRow spin_rows = new Adw.SpinRow.with_range (1, 50, 1);
         spin_rows.set_title ("Maximum filters per row");
-        cb_single.set_sensitive (false);
+        spin_rows.set_sensitive (false);
         spin_rows.set_numeric (true);
         group_a.add (spin_rows);
+        this.settings.bind ("spin-rows", spin_rows, "value", GLib.SettingsBindFlags.DEFAULT);
 
         cb_vertical.activated.connect (()=>{
             if (cb_vertical.active) {
@@ -758,46 +771,55 @@ public class Preferences : Adw.PreferencesDialog {
         view_name.set_title ("Name");
         view_name.set_active (true);
         group_a1.add (view_name);
+        this.settings.bind ("show-result-name", view_name, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_size = new Adw.SwitchRow ();
         view_size.set_title ("Size");
         view_size.set_active (true);
         group_a1.add (view_size);
+        this.settings.bind ("show-result-size", view_size, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_type = new Adw.SwitchRow ();
         view_type.set_title ("Type");
         view_type.set_active (false);
         group_a1.add (view_type);
+        this.settings.bind ("show-result-type", view_type, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_modified = new Adw.SwitchRow ();
         view_modified.set_title ("Modified");
         view_modified.set_active (true);
         group_a1.add (view_modified);
+        this.settings.bind ("show-result-mod", view_modified, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_permissions = new Adw.SwitchRow ();
         view_permissions.set_title ("Permissions");
         view_permissions.set_active (false);
         group_a1.add (view_permissions);
+        this.settings.bind ("show-result-permissions", view_permissions, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_mime = new Adw.SwitchRow ();
         view_mime.set_title ("MIME");
         view_mime.set_active (true);
         group_a1.add (view_mime);
+        this.settings.bind ("show-result-mime", view_mime, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_path = new Adw.SwitchRow ();
         view_path.set_title ("Location");
         view_path.set_active (true);
         group_a1.add (view_path);
+        this.settings.bind ("show-result-path", view_path, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_position = new Adw.SwitchRow ();
         view_position.set_title ("Position");
         view_position.set_active (true);
         group_a1.add (view_position);
+        this.settings.bind ("show-result-position", view_position, "active", GLib.SettingsBindFlags.DEFAULT);
 
         Adw.SwitchRow view_row = new Adw.SwitchRow ();
         view_row.set_title ("Content");
         view_row.set_active (true);
         group_a1.add (view_row);
+        this.settings.bind ("show-result-row", view_row, "active", GLib.SettingsBindFlags.DEFAULT);
 
 //         view = new Gtk.TreeView ();
 //         store = new Gtk.TreeStore (2, typeof (bool), typeof (string));
@@ -824,12 +846,6 @@ public class Preferences : Adw.PreferencesDialog {
         Adw.PreferencesGroup group_b = new Adw.PreferencesGroup ();
         mime_groups_page.add (group_b);
         this.add (mime_groups_page);
-
-
-//         label = new Label ("<b>User defined MIME Groups.</b>");
-//         label.use_markup = true;
-//         label.xalign = 0;
-//         box.add (label);
 
 //         hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 //         box.pack_start (hbox, false, false, 0);

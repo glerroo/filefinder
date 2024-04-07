@@ -10,3 +10,8 @@ install_data (join_paths ('templates', 'template'),
 install_data ('filefinder.desktop',
               install_dir: join_paths(data_dir, 'applications'))
 
+# Gschema file
+install_data('org.konkor.filefinder.gschema.xml',
+             install_dir: join_paths(data_dir, 'glib-2.0/schemas'),
+)
+

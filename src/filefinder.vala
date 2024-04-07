@@ -31,6 +31,7 @@
 public class Filefinder : Adw.Application
 {
     public static bool debugging;
+    private Settings settings;
     // public static FileFinderWindow? window = null;
     public static Preferences preferences;
     // public static Service service;
@@ -40,6 +41,8 @@ public class Filefinder : Adw.Application
     public Filefinder (/*string[] args*/) {
         GLib.Object (application_id: "org.konkor.filefinder",
             flags: ApplicationFlags.HANDLES_OPEN);
+
+            // set_resource_base_path ("/org/konkor/filefider");
     //  uris = new List<string>();
     //  int i, count = args.length;
     //  for (i = 1; i < count; i++) {
@@ -58,6 +61,8 @@ public class Filefinder : Adw.Application
     }
 
     construct {
+        // this.settings = new GLib.Settings ("org.konkor.filefinder");
+
         GLib.ActionEntry[] action_entries = {
             {"about", on_about_action},
             {"preferences", on_preferences_action},
@@ -74,6 +79,11 @@ public class Filefinder : Adw.Application
 
     protected override void startup () {
         base.startup ();
+
+        this.settings = new GLib.Settings ("org.konkor.filefinder");
+
+        // this.settings.set_boolean ("cb-single", true);
+        // settings.apply ();
         // GLib.Menu section = new GLib.Menu ();
         // section.append_item (new GLib.MenuItem ("Preferences", "app.preferences"));
         // section.append_item (new GLib.MenuItem ("About", "app.about"));
