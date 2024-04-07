@@ -1,45 +1,74 @@
-/* -*- Mode: vala; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
+ * This file is part of File Finder.
+ * https://gitlab.gnome.org/glerro/filefinder
+ *
  * query-editor.vala
  *
- * filefinder is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
+ * Copyright (c) 2024 Gianni Lerro {glerro} ~ <glerro@pm.me>
+ *
+ * File Finder is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * filefinder is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
+ *
+ * File Finder is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * with File Finder. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * *****************************************************************************
+ * Original Author: 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
+ * *****************************************************************************
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2024 Gianni Lerro <glerro@pm.me>
  */
 
-public class QueryEditor : Gtk.FlowBox {
+public class QueryEditor : Gtk.Widget {
+    public Gtk.FlowBox flowBox;
+
     public signal void changed_rows ();
     public signal void search ();
 
     public GLib.List<QueryRow> rows;
     //private FilterBar fbar;
 
+    static construct {
+        set_layout_manager_type (typeof (Gtk.BinLayout));
+    }
+
     public QueryEditor () {
+        flowBox = new Gtk.FlowBox ();
+        flowBox.set_parent (this);
+
         //GLib.Object (orientation:Gtk.Orientation.VERTICAL, spacing:0);
-        this.homogeneous = false;
-        this.get_style_context ().add_class ("search-bar");
-        this.margin = 0;
-        selection_mode = Gtk.SelectionMode.NONE;
-        max_children_per_line = 1;
-        if (Filefinder.preferences != null)
-            max_children_per_line = Filefinder.preferences.filter_count;
-        valign = Gtk.Align.START;
-        set_sort_func (sort_boxes);
+        flowBox.homogeneous = false;
+        flowBox.get_style_context ().add_class ("search-bar");
+        flowBox.margin_top = 0;
+        flowBox.margin_bottom = 0;
+        flowBox.margin_start = 0;
+        flowBox.margin_end = 0;
+
+        flowBox.selection_mode = Gtk.SelectionMode.NONE;
+        flowBox.max_children_per_line = 1;
+        // if (Filefinder.preferences != null)
+        //     max_children_per_line = Filefinder.preferences.filter_count;
+        flowBox.valign = Gtk.Align.START;
+        flowBox.set_sort_func (sort_boxes);
 
         //fbar = new FilterBar ();
         //add (fbar);
 
         rows = new GLib.List<QueryRow> ();
-        show_all ();
+        // show_all ();
+    }
+
+    protected override void dispose () {
+        flowBox.unparent ();
     }
 
     private int sort_boxes (Gtk.FlowBoxChild child1, Gtk.FlowBoxChild child2) {
@@ -60,15 +89,15 @@ public class QueryEditor : Gtk.FlowBox {
     }
 
     public void add_row (QueryRow row) {
-        add (row);
+        flowBox.append (row);
         row.closed.connect (on_row_close);
         row.search.connect (()=>{search ();});
         row.changed_type.connect ((r)=>{
-            invalidate_sort ();
+            flowBox.invalidate_sort ();
             changed_rows ();
         });
         rows.append (row);
-        invalidate_sort ();
+        flowBox.invalidate_sort ();
         changed_rows ();
         //row.parent.grab_focus ();
     }
@@ -88,7 +117,7 @@ public class QueryEditor : Gtk.FlowBox {
     private void on_row_close (QueryRow row) {
         rows.remove (row);
         row.get_parent().dispose ();
-        invalidate_sort ();
+        flowBox.invalidate_sort ();
         changed_rows ();
     }
 
@@ -126,7 +155,7 @@ public class QueryEditor : Gtk.FlowBox {
 
     public void add_folder (string path) {
         QueryRow row = new QueryRow ();
-        row.chooser.select_filename (path);
+        // row.chooser.select_filename (path);
         row.location.folder = path;
         add_row (row);
     }
