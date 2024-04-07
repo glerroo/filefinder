@@ -130,7 +130,7 @@ public enum types {
     NONE
 }
 
-public static const string[] type_names = {
+public const string[] type_names = {
     "Folder",
     "Files",
     "Mask",
@@ -141,7 +141,7 @@ public static const string[] type_names = {
     "Modified"
 };
 
-public static const string[] type_tooltips = {
+public const string[] type_tooltips = {
     "Folder Location",
     "Files Location",
     "File Mask Filter",

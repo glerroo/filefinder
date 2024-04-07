@@ -62,7 +62,7 @@ public enum date_operator {
     MORE
 }
 
-public static const string[] date_operators = {
+public const string[] date_operators = {
     "not equal",
     "less",
     "less or equal",
