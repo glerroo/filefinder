@@ -116,7 +116,8 @@ public class QueryEditor : Gtk.Widget {
 
     private void on_row_close (QueryRow row) {
         rows.remove (row);
-        row.get_parent().dispose ();
+        // row.get_parent().dispose ();
+        flowBox.remove(row);
         flowBox.invalidate_sort ();
         changed_rows ();
     }

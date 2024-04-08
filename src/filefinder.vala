@@ -32,7 +32,7 @@ public class Filefinder : Adw.Application
 {
     public static bool debugging;
     private Settings settings;
-    // public static FileFinderWindow? window = null;
+    public static FileFinderWindow? window = null;
     public static Preferences preferences;
     // public static Service service;
     // public static Filefinder self;
@@ -141,7 +141,7 @@ public class Filefinder : Adw.Application
 
     protected override void activate () {
         base.activate ();
-        var window = this.active_window;
+        window = (FileFinderWindow) this.active_window;
         if (window == null) {
             window = new FileFinderWindow (this);
         }

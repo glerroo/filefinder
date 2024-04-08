@@ -42,7 +42,7 @@ public class FileFinderWindow : Adw.ApplicationWindow {
         this.settings.bind ("window-maximized", this, "maximized", GLib.SettingsBindFlags.DEFAULT);
 
         build ();
-        // initialize ();
+        initialize ();
     }
 
     // private Gtk.Box vbox1;
@@ -65,7 +65,7 @@ public class FileFinderWindow : Adw.ApplicationWindow {
     // private Gtk.Box toolbar_bottom;
     // private FilterBar filterbar;
 
-    // public QueryEditor editor;
+    public QueryEditor editor;
     // public ResultsView result_view;
     // public Gtk.CheckMenuItem cmi;
 
@@ -223,7 +223,8 @@ public class FileFinderWindow : Adw.ApplicationWindow {
         // scrolledwindow1.get_style_context ().add_class ("search-bar");
         // paned.pack1 (scrolledwindow1, false, true);
 
-        // editor = new QueryEditor ();
+        editor = new QueryEditor ();
+        ss.set_sidebar (editor);
         // editor.expand = true;
         // scrolledwindow1.add (editor);
         // editor.search.connect (()=>{button_go.clicked ();});
@@ -249,7 +250,7 @@ public class FileFinderWindow : Adw.ApplicationWindow {
         // }
     }
 
-    // private void initialize () {
+    private void initialize () {
     //     button_go.clicked.connect (on_go_clicked);
     //     result_view.changed_selection.connect (()=>{set_subtitle ();});
     //     realize.connect (()=>{
@@ -258,8 +259,15 @@ public class FileFinderWindow : Adw.ApplicationWindow {
     //         if (Filefinder.uris.length() > 0) {
     //             add_locations (Filefinder.uris);
     //         } else {
-    //             add_filter (types.LOCATION);
-    //             add_filter (types.TEXT);
+                add_filter (types.LOCATION);
+                add_filter (types.TEXT);
+                // TODO: Remove next 6 lines
+                add_filter (types.FILES);
+                add_filter (types.FILEMASK);
+                add_filter (types.MODIFIED);
+                add_filter (types.BINARY);
+                add_filter (types.MIMETYPE);
+                add_filter (types.SIZE);
     //         }
     //         unmap.connect (()=>{
     //             Debug.info ("window unmap", "save_geometry");
@@ -279,7 +287,7 @@ public class FileFinderWindow : Adw.ApplicationWindow {
     //         add_filter (types.LOCATION);
     //         add_filter (types.TEXT);
     //     }*/
-    // }
+    }
 
     // public bool show_box {
     //     get {return empty_box.visible;}
@@ -332,10 +340,10 @@ public class FileFinderWindow : Adw.ApplicationWindow {
     //     }
     // }
 
-    // public void add_filter (types filter_type = types.LOCATION) {
-    //     paned.visible = true;
-    //     editor.add_filter (filter_type);
-    // }
+    public void add_filter (types filter_type = types.LOCATION) {
+        // paned.visible = true;
+        editor.add_filter (filter_type);
+    }
 
     // public void add_locations (List<string> uris) {
     //     File file;
