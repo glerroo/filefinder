@@ -1,4 +1,4 @@
-/* -*- Mode: vala; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
  * mime-button.vala
  * Copyright (C) 2016 kapa <kkorienkov <at> gmail.com>
@@ -17,51 +17,64 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class MimeButton : Gtk.MenuButton {
+public class MimeButton : Gtk.Widget {
     private FilterMime mime;
 
+    private Gtk.MenuButton menuButton;
     private Gtk.Popover pop;
     private Gtk.TreeView mime_group;
     private Gtk.ListStore mime_group_store;
     private Gtk.TreeView mime_type;
     private Gtk.ListStore mime_type_store;
 
+    static construct {
+        set_layout_manager_type (typeof (Gtk.BinLayout));
+    }
+
     public MimeButton (FilterMime filter) {
+        menuButton = new Gtk.MenuButton ();
+        menuButton.set_parent (this);
+
         mime = filter;
-        use_underline = true;
-        label = mime.name;
-        tooltip_text = "Any " + label;
-        xalign = 0;
+        menuButton.use_underline = true;
+        menuButton.label = mime.name;
+        menuButton.tooltip_text = "Any " + menuButton.label;
+        // menuButton.xalign = 0;
 
         build ();
 
-        clicked.connect (()=>{
+        menuButton.activate.connect (()=>{
             int i = get_allocated_width() + 32;
             if (i < 480)
                 pop.width_request = 480;
             else
-                pop.width_request = i;
+            pop.width_request = i;
         });
     }
 
+    protected override void dispose () {
+        menuButton.unparent ();
+        base.dispose ();
+    }
+
     private void build () {
-        pop = new Gtk.Popover (this);
+        pop = new Gtk.Popover ();
         pop.width_request = 512;
         pop.height_request = 320;
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 2);
-        pop.add (box);
-        set_popover (pop);
+        pop.set_child (box);
+        menuButton.set_popover (pop);
 
-        var scroll = new Gtk.ScrolledWindow (null, null);
-        scroll.shadow_type = Gtk.ShadowType.OUT;
+        var scroll = new Gtk.ScrolledWindow ();
+        // scroll.shadow_type = Gtk.ShadowType.OUT;
         scroll.halign = Gtk.Align.START;
-        box.add (scroll);
+        box.append (scroll);
 
         mime_group = new Gtk.TreeView ();
         mime_group_store = new Gtk.ListStore (1, typeof (string));
         mime_group.set_model (mime_group_store);
         mime_group.insert_column_with_attributes (-1, "Group", new Gtk.CellRendererText (), "text", 0, null);
-        scroll.add (mime_group);
+        scroll.set_child (mime_group);
         Gtk.TreeIter it = {};
         foreach (MimeGroup s in Filefinder.preferences.mime_type_groups) {
             mime_group_store.append (out it);
@@ -69,17 +82,19 @@ public class MimeButton : Gtk.MenuButton {
         }
         scroll.width_request = 200;
 
-        scroll = new Gtk.ScrolledWindow (null, null);
-        scroll.shadow_type = Gtk.ShadowType.OUT;
-        scroll.expand = true;
-        box.add (scroll);
+        scroll = new Gtk.ScrolledWindow ();
+        // scroll.shadow_type = Gtk.ShadowType.OUT;
+        // scroll.expand = true;
+        box.append (scroll);
 
         mime_type = new Gtk.TreeView ();
+        mime_type.set_hexpand (true);
+		mime_type.set_vexpand (true);
         mime_type.get_selection ().mode = Gtk.SelectionMode.MULTIPLE;
         mime_type_store = new Gtk.ListStore (1, typeof (string));
         mime_type.set_model (mime_type_store);
         mime_type.insert_column_with_attributes (-1, "MIME", new Gtk.CellRendererText (), "text", 0, null);
-        scroll.add (mime_type);
+        scroll.set_child (mime_type);
 
         mime_group.get_selection ().changed.connect (()=>{
             Gtk.TreePath p;
@@ -96,7 +111,7 @@ public class MimeButton : Gtk.MenuButton {
                 mime_type_store.set (it, 0, s, -1);
                 mime.add (s);
             }
-            set_mime_label (alloc);
+            set_mime_label (/*alloc*/);
         });
         mime_type.get_selection ().changed.connect (()=>{
             Gtk.TreePath p0;
@@ -112,8 +127,8 @@ public class MimeButton : Gtk.MenuButton {
                     foreach (string s in Filefinder.preferences.mime_type_groups[p0.get_indices ()[0]].mimes) {
                         mime.add (s);
                     }
-                    set_mime_label (alloc);
-                    tooltip_text = "Any Of The " + label;
+                    set_mime_label (/*alloc*/);
+                    tooltip_text = "Any Of The " + menuButton.label;
                     return;
                 }
                 if (mime_type.model.get_iter (out it, p)) {
@@ -127,25 +142,26 @@ public class MimeButton : Gtk.MenuButton {
                 tt += "(Selected %u types)".printf (mime.mime.length());
             }
             tooltip_text = tt;
-            set_mime_label (alloc);
+            set_mime_label (/*alloc*/);
         });
-        box.show_all ();
+        // box.show_all ();
         playout = (new Gtk.Label("")).get_layout ();
     }
 
-    private int w = 0;
-    private Gtk.Allocation alloc;
+    // TODO: Fix size_allocate don't work
+    private int w = 500; // 0;
+    // private Gtk.Allocation alloc;
 
-    public override void size_allocate (Gtk.Allocation allocation) {
-        base.size_allocate (allocation);
+    public override void size_allocate (int width, int height, int baseline /*Gtk.Allocation allocation*/) {
+        // base.size_allocate (width, height, baseline /*allocation*/);
         if (mime == null) return;
-        alloc = allocation;
-        if (w == allocation.width) return;
-        w = allocation.width;
-        set_mime_label (allocation);
+        // alloc = allocation;
+        if (w == /*allocation.*/width) return;
+        w = /*allocation.*/width;
+        set_mime_label (/*allocation*/);
     }
 
-    private void set_mime_label (Gtk.Allocation allocation) {
+    private void set_mime_label (/*Gtk.Allocation allocation*/) {
         int j = 0;
         string[] mnames = {};
         string[] snames = mime.name.split (" ");
@@ -163,25 +179,26 @@ public class MimeButton : Gtk.MenuButton {
         if (snames.length > 1) mnames += snames[0];
         if (mime.name.length > 6) mnames += (mime.name.substring (0, 3) + "...");
         mnames += "...";
-        label = "";
+        menuButton.label = "";
         foreach (string s in mnames) {
             if (label_len (s) < w) {
-                label = s;
+                menuButton.label = s;
                 break;
             }
         }
 
-#if HAVE_GTK320
+// #if HAVE_GTK320
         base.queue_allocate ();
-#else
-        base.size_allocate (allocation);
-#endif
+// #else
+        // base.size_allocate (allocation);
+// #endif
     }
 
     private Pango.Layout playout;
     private int label_len (string s) {
-        int i = 2 * margin + 48, w, h;
-        playout.set_font_description (get_style_context().get_font (Gtk.StateFlags.FOCUSED));
+        int i = 2 * menuButton.margin_start + 48, w, h;
+        // playout.set_font_description (get_style_context().get_font (Gtk.StateFlags.FOCUSED));
+        playout.set_font_description (get_pango_context().get_font_description ());
         playout.set_markup (s, -1);
         playout.get_pixel_size(out w, out h);
         return i + w;
