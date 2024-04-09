@@ -1,6 +1,6 @@
-/* -*- Mode: vala; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * pluging.vala
+ * plugin.vala
  * Copyright (C) 2016-2018 kapa <kkorienkov <at> gmail.com>
  *
  * filefinder is free software: you can redistribute it and/or modify it
@@ -32,8 +32,8 @@ public class Plugin : GLib.Object {
             _uuid = ((uint)this).to_string ();
             SimpleAction simple_action = new SimpleAction (_uuid, null);
             simple_action.activate.connect (hotkey_cb);
-            Filefinder.self.add_action (simple_action);
-            Filefinder.self.set_accels_for_action ("app." + _uuid, {hotkey});
+            // Filefinder.self.add_action (simple_action);
+            // Filefinder.self.set_accels_for_action ("app." + _uuid, {hotkey});
         }
     }
 
@@ -58,7 +58,7 @@ public class Plugin : GLib.Object {
     private void hotkey_cb (SimpleAction action, Variant? parameter) {
         if (Filefinder.window == null) return;
         try {
-            Filefinder.window.result_view.launch (this);
+            // Filefinder.window.result_view.launch (this);
         } catch (Error e) {
             Debug.error (label, e.message);
         }
@@ -66,7 +66,7 @@ public class Plugin : GLib.Object {
 
     protected override void dispose () {
         if (_uuid.length > 0)
-            Filefinder.self.remove_action (_uuid);
+            // Filefinder.self.remove_action (_uuid);
         base.dispose ();
     }
 }

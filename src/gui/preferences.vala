@@ -58,8 +58,8 @@ public class Preferences : Adw.PreferencesDialog {
     public bool is_changed = false;
     // public bool first_run = true;
 
-    // public List<Plugin> plugins;
-    // public string default_plugin = "";
+    public List<Plugin> plugins;
+    public string default_plugin = "";
 
     // public Cairo.RectangleInt rect = Cairo.RectangleInt()
     //                                 {x=0,y=0,width=800,height=512};
@@ -70,6 +70,10 @@ public class Preferences : Adw.PreferencesDialog {
         // _mime_count = _mime_type_groups.length;
         // this.settings = _settings;
         this.settings = new GLib.Settings ("org.konkor.filefinder");
+
+print ("N plugins: %u\n", plugins.length ());
+load_plugs ();
+print ("N plugins: %u\n", plugins.length ());
 
         build_gui ();
         // load ();
@@ -326,172 +330,174 @@ public class Preferences : Adw.PreferencesDialog {
 //         return null;
 //     }
 
-//     public File? create_plug (string name = "compress") {
-//         File file, template;
-//         string path = Path.build_filename (Environment.get_user_data_dir (),
-//                                             "filefinder", "extensions");
-//         file = File.new_for_path (path);
-//         if (!file.query_exists ())
-//             DirUtils.create (path, 0744);
-//         path = Path.build_filename (path, name);
-//         file = File.new_for_path (path);
-//         if (file.query_exists ())
-//             return file;
-//         try {
-//             template = File.new_for_path (Config.TEMPLATE_DIR + "/template");
-//             template.copy (file, 0, null, null);
-//             FileUtils.chmod (path, 0755);
-//         } catch (Error e) {
-//             Debug.error ("create_plugs", e.message);
-//             return null;
-//         }
-//         return file;
-//     }
+    public File? create_plug (string name = "compress") {
+        File file, template;
+        string path = Path.build_filename (Environment.get_user_data_dir (),
+                                            "filefinder", "extensions");
+        file = File.new_for_path (path);
+        if (!file.query_exists ())
+            GLib.DirUtils.create_with_parents (path, 0744);
+        path = Path.build_filename (path, name);
+        file = File.new_for_path (path);
+        if (file.query_exists ())
+            return file;
+        try {
+            template = File.new_for_path (Config.TEMPLATE_DIR + "/template");
+            template.copy (file, 0, null, null);
+            FileUtils.chmod (path, 0755);
+        } catch (Error e) {
+            Debug.error ("create_plugs", e.message);
+            return null;
+        }
+        return file;
+    }
 
-//     public bool load_plugs () {
-//         File dir = File.new_for_path (Path.build_filename (
-//                                     Environment.get_user_data_dir (),
-//                                     "filefinder", "extensions"));
-//         plugins = new List<Plugin>();
-//         if (!dir.query_exists ()) {
-//             is_changed=true;
-//             save ();
-//         }
-//         read_plugs (dir);
-//         plugins.sort (plugcmp);
-//         return true;
-//     }
+    public bool load_plugs () {
+        File dir = File.new_for_path (Path.build_filename (
+                                    Environment.get_user_data_dir (),
+                                    "filefinder", "extensions"));
+        plugins = new List<Plugin>();
+        if (!dir.query_exists ()) {
+            is_changed=true;
+            // save ();
+        }
+        read_plugs (dir);
+        plugins.sort (plugcmp);
+        return true;
+    }
 
-//     private void read_plugs (File dir) {
-//         FileInfo info;
-//         if (!dir.query_exists ()) return;
-//         try {
-//             info = dir.query_info ("*", 0);
-//             if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_READ)){
-//                 return;
-//             }
-//             var e = dir.enumerate_children ("*", FileQueryInfoFlags.NONE, null);
-//             while ((info = e.next_file (null)) != null) {
-//                 if (info.get_name ().has_prefix (".")) continue;
-//                 if (info.get_is_backup ()) continue;
-//                 switch (info.get_file_type ()) {
-//                     case FileType.DIRECTORY:
-//                         read_plugs (dir.get_child (info.get_name ()));
-//                         break;
-//                     case FileType.REGULAR:
-//                         string mime = info.get_content_type ();
-//                         if ((mime != "application/x-shellscript")) {
-//                             continue;
-//                         }
-//                         if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_READ)){
-//                             continue;
-//                         }
-//                         if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_EXECUTE)){
-//                             continue;
-//                         }
-//                         parse_plug (dir.get_child (info.get_name ()));
-//                         break;
-//                     default:
-//                         break;
-//                 }
-//             }
-//         } catch (Error err) {
-//             Debug.error ("read_plugs", err.message);
-//         }
-//         return;
-//     }
+    private void read_plugs (File dir) {
+        FileInfo info;
+        if (!dir.query_exists ()) return;
+        try {
+            info = dir.query_info ("*", 0);
+            if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_READ)){
+                return;
+            }
+            var e = dir.enumerate_children ("*", FileQueryInfoFlags.NONE, null);
+            while ((info = e.next_file (null)) != null) {
+                if (info.get_name ().has_prefix (".")) continue;
+                if (info.get_is_backup ()) continue;
+                switch (info.get_file_type ()) {
+                    case FileType.DIRECTORY:
+                        read_plugs (dir.get_child (info.get_name ()));
+                        break;
+                    case FileType.REGULAR:
+                        string mime = info.get_content_type ();
+                        if ((mime != "application/x-shellscript")) {
+                            continue;
+                        }
+                        if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_READ)){
+                            continue;
+                        }
+                        if (!info.get_attribute_boolean (FileAttribute.ACCESS_CAN_EXECUTE)){
+                            continue;
+                        }
+                        parse_plug (dir.get_child (info.get_name ()));
+                        break;
+                    default:
+                        print ("Default");
+                        break;
+                }
+            }
+        } catch (Error err) {
+            Debug.error ("read_plugs", err.message);
+        }
+        return;
+    }
 
-//     private void parse_plug (File file) {
-//         int i = 0, count = 0;
-//         string name = file.get_basename(), desc = "", keys = "", line, command;
-//         string icon = "", gr = "";
-//         bool psync = false;
-//         plug_args args = plug_args.FILES;
-//         Plugin plugin;
-//         try {
-//             DataInputStream dis = new DataInputStream (file.read ());
-//             while ((line = dis.read_line (null)) != null) {
-//                 i = line.index_of (" ");
-//                 if ((i > 0) && (line.length > i)) {
-//                     command = line.substring (0, i).up();
-//                     line = line.substring (i + 1).strip ();
-//                     if (line.length == 0) continue;
-//                     switch (command) {
-//                     case "#PLUGNAME":
-//                         name = line;
-//                         count++;
-//                         break;
-//                     case "#PLUGDESC":
-//                         desc = line;
-//                         count++;
-//                         break;
-//                     case "#PLUGKEYS":
-//                         keys = line;
-//                         count++;
-//                         break;
-//                     case "#PLUGICON":
-//                         icon = line;
-//                         count++;
-//                         break;
-//                     case "#PLUGGROUP":
-//                         gr = line;
-//                         count++;
-//                         break;
-//                     case "#PLUGSYNC":
-//                         psync = bool.parse(line);
-//                         count++;
-//                         break;
-//                     case "#PLUGARGS":
-//                         line = line.up ();
-//                         if (line == "FILEDIRS")
-//                             args = plug_args.FILEDIRS;
-//                         else if (line == "FILEPOS")
-//                             args = plug_args.FILEPOS;
-//                         count++;
-//                         break;
-//                     }
-//                 }
-//             }
-            //we need at least one tag to identify pluging 
-//             if (count > 0) {
-//                 plugin = new Plugin (name, desc, file.get_path(), keys,
-//                                     file.get_uri() == default_plugin);
-//                 plugin.group = gr;
-//                 plugin.icon = icon;
-//                 plugin.sync = psync;
-//                 plugin.arguments = args;
-//                 plugins.append (plugin);
-//             }
-//         } catch (Error err) {
-//             Debug.error ("parse_plug", err.message);
-//         }
-//     }
+    private void parse_plug (File file) {
+        int i = 0, count = 0;
+        string name = file.get_basename(), desc = "", keys = "", line, command;
+        string icon = "", gr = "";
+        bool psync = false;
+        plug_args args = plug_args.FILES;
+        Plugin plugin;
+        try {
+            DataInputStream dis = new DataInputStream (file.read ());
+            while ((line = dis.read_line (null)) != null) {
+                i = line.index_of (" ");
+                if ((i > 0) && (line.length > i)) {
+                    command = line.substring (0, i).up();
+                    line = line.substring (i + 1).strip ();
+                    if (line.length == 0) continue;
+                    switch (command) {
+                    case "#PLUGNAME":
+                        name = line;
+                        count++;
+                        break;
+                    case "#PLUGDESC":
+                        desc = line;
+                        count++;
+                        break;
+                    case "#PLUGKEYS":
+                        keys = line;
+                        count++;
+                        break;
+                    case "#PLUGICON":
+                        icon = line;
+                        count++;
+                        break;
+                    case "#PLUGGROUP":
+                        gr = line;
+                        count++;
+                        break;
+                    case "#PLUGSYNC":
+                        psync = bool.parse(line);
+                        count++;
+                        break;
+                    case "#PLUGARGS":
+                        line = line.up ();
+                        if (line == "FILEDIRS")
+                            args = plug_args.FILEDIRS;
+                        else if (line == "FILEPOS")
+                            args = plug_args.FILEPOS;
+                        count++;
+                        break;
+                    }
+                }
+            }
+            //we need at least one tag to identify pluging
+            if (count > 0) {
+                plugin = new Plugin (name, desc, file.get_path(), keys,
+                                    file.get_uri() == default_plugin);
+                plugin.group = gr;
+                plugin.icon = icon;
+                plugin.sync = psync;
+                plugin.arguments = args;
+                plugins.append (plugin);
+            }
+        } catch (Error err) {
+            Debug.error ("parse_plug", err.message);
+        }
+    }
 
-//     CompareFunc<Plugin> plugcmp = (a, b) => {
-//         if (a == null) return 1;
-//         if (b == null) return -1;
-//         return strcmp (a.uri, b.uri);
-//     };
+    CompareFunc<Plugin> plugcmp = (a, b) => {
+        if (a == null) return 1;
+        if (b == null) return -1;
+        return strcmp (a.uri, b.uri);
+    };
 
-//     private void refresh_gui () {
-//         refresh_general ();
-//         refresh_ui ();
+    private void refresh_gui () {
+print ("Refresh gui .......\n");
+        // refresh_general ();
+        // refresh_ui ();
         //refresh_mime ();
-//         page_plug.reload ();
-//     }
+        page_plug.reload ();
+    }
 
-//     private void refresh_general () {
-//     }
+    // private void refresh_general () {
+    // }
 
-//     private void refresh_ui () {
-//         Gtk.TreeIter it;
-//         store.clear ();
-//         foreach (ViewColumn p in columns) {
-//             store.append (out it, null);
-//             store.set (it, 0, p.visible, 1, p.title, -1);
-//         }
+    // private void refresh_ui () {
+    //     Gtk.TreeIter it;
+    //     store.clear ();
+    //     foreach (ViewColumn p in columns) {
+    //         store.append (out it, null);
+    //         store.set (it, 0, p.visible, 1, p.title, -1);
+    //     }
         //cb_vertical.active
-//     }
+    // }
 
 //     private void refresh_groups (int index = 0) {
 //         cb_group.remove_all ();
@@ -549,7 +555,7 @@ public class Preferences : Adw.PreferencesDialog {
 //     private Gtk.CheckButton cb_single;
 //     private Gtk.SpinButton spin_rows;
 
-//     private PagePlugin page_plug;
+    private PagePlugin page_plug;
 
     private void build_gui () {
 //         Gtk.Label label;
@@ -966,16 +972,9 @@ public class Preferences : Adw.PreferencesDialog {
 //         });
 
         // Plugins
-        Adw.PreferencesPage plugins_page = new Adw.PreferencesPage ();
-        mime_groups_page.set_title ("MIME Groups");
-        Adw.PreferencesGroup group_c = new Adw.PreferencesGroup ();
-        plugins_page.add (group_c);
-        this.add (plugins_page);
-//         page_plug = new PagePlugin ();
-//         notebook.add (page_plug);
-//         label = new Label ("Extensions");
-//         notebook.set_tab_label (page_plug, label);
-        
+        PagePlugin page_plug = new PagePlugin ();
+        this.add (page_plug);
+
 //         set_default_size (640, 480);
 //         show_all ();
 //         hide ();
@@ -1023,21 +1022,21 @@ public class Preferences : Adw.PreferencesDialog {
 //             cb_autohide.active = enable;
 //     }
 
-//     private bool _show_toolbar = true;
-//     public bool show_toolbar {
-//         get {
-//             return _show_toolbar;
-//         }
-//         set {
-//             if (_show_toolbar == value) return;
-//             _show_toolbar = value;
-//             if (Filefinder.window == null) return;
-//             if (_show_toolbar)
-//                 Filefinder.window.enable_toolbar ();
-//             else
-//                 Filefinder.window.disable_toolbar ();
-//         }
-//     }
+    private bool _show_toolbar = true;
+    public bool show_toolbar {
+        get {
+            return _show_toolbar;
+        }
+        set {
+            if (_show_toolbar == value) return;
+            _show_toolbar = value;
+            if (Filefinder.window == null) return;
+            // if (_show_toolbar)
+            //     Filefinder.window.enable_toolbar ();
+            // else
+            //     Filefinder.window.disable_toolbar ();
+        }
+    }
 
 //     private bool _toolbar_groups = true;
 //     public bool toolbar_groups {

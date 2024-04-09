@@ -1,30 +1,45 @@
-/* -*- Mode: vala; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/* -*- Mode: Vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * page-plugin.vala
- * Copyright (C) 2016 konkor <kkorienkov <at> gmail.com>
+ * This file is part of File Finder.
+ * https://gitlab.gnome.org/glerro/filefinder
  *
- * filefinder is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
+ * page-plugin.vala
+ *
+ * Copyright (c) 2024 Gianni Lerro {glerro} ~ <glerro@pm.me>
+ *
+ * File Finder is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * filefinder is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
+ *
+ * File Finder is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
- * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * with File Finder. If not, see <https://www.gnu.org/licenses/>.
+ *
+ * *****************************************************************************
+ * Original Author: 2016 Kostiantyn Korienkov <kkorienkov [at] gmail.com>
+ * *****************************************************************************
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2024 Gianni Lerro <glerro@pm.me>
  */
-using Gtk;
 
-public class PagePlugin : Gtk.ScrolledWindow {
+public class PagePlugin : Adw.PreferencesPage {
 
     public PagePlugin () {
+        this.set_title ("Extensions");
+
+        this.settings = new GLib.Settings ("org.konkor.filefinder");
+
         build ();
     }
 
     private int selection = -1;
+    private GLib.Settings settings;
     private Gtk.TreeView view;
     private Gtk.ListStore store;
 
@@ -34,49 +49,58 @@ public class PagePlugin : Gtk.ScrolledWindow {
     private Gtk.Box tbox;
 
     private void build () {
-        Gtk.Box box = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        box.border_width = 6;
-        add (box);
+        Adw.PreferencesGroup group_c = new Adw.PreferencesGroup ();
+        this.add (group_c);
 
-        cb_toolbar = new Gtk.CheckButton.with_label ("Show plugin toolbar");
-        box.add (cb_toolbar);
-        tbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 6);
-        tbox.set_margin_start (20);
-        box.add (tbox);
-        cb_tgroups = new Gtk.CheckButton.with_label ("Enable groups of the extensions");
-        tbox.add (cb_tgroups);
-        cb_thotkey = new Gtk.CheckButton.with_label ("Show keyboard shotcuts");
-        tbox.add (cb_thotkey);
-        cb_toolbar.toggled.connect (()=>{
-            if (Filefinder.preferences == null) return;
-            Filefinder.preferences.show_toolbar = cb_toolbar.active;
-            tbox.sensitive = cb_toolbar.active;
-            Filefinder.preferences.is_changed = true;
+        Adw.SwitchRow cb_toolbar = new Adw.SwitchRow ();
+        cb_toolbar.set_title ("Show plugin toolbar");
+        cb_toolbar.set_active (false);
+        group_c.add (cb_toolbar);
+        this.settings.bind ("show-toolbar", cb_toolbar, "active", GLib.SettingsBindFlags.DEFAULT);
+
+        Adw.SwitchRow cb_tgroups = new Adw.SwitchRow ();
+        cb_tgroups.set_title ("Enable groups of the extensions");
+        cb_tgroups.set_active (true);
+        group_c.add (cb_tgroups);
+        this.settings.bind ("toolbar-groups", cb_tgroups, "active", GLib.SettingsBindFlags.DEFAULT);
+
+        Adw.SwitchRow cb_thotkey = new Adw.SwitchRow ();
+        cb_thotkey.set_title ("Show keyboard shotcuts");
+        cb_thotkey.set_active (true);
+        group_c.add (cb_thotkey);
+        this.settings.bind ("toolbar-shortcuts", cb_thotkey, "active", GLib.SettingsBindFlags.DEFAULT);
+
+        cb_toolbar.activated.connect (()=>{
+            // if (Filefinder.preferences == null) return;
+            // Filefinder.preferences.show_toolbar = cb_toolbar.active;
+            // tbox.sensitive = cb_toolbar.active;
+            // Filefinder.preferences.is_changed = true;
         });
-        cb_tgroups.toggled.connect (()=>{
-            if (Filefinder.preferences == null) return;
-            Filefinder.preferences.toolbar_groups = cb_tgroups.active;
-            Filefinder.preferences.is_changed = true;
+        cb_tgroups.activated.connect (()=>{
+            // if (Filefinder.preferences == null) return;
+            // Filefinder.preferences.toolbar_groups = cb_tgroups.active;
+            // Filefinder.preferences.is_changed = true;
         });
-        cb_thotkey.toggled.connect (()=>{
-            if (Filefinder.preferences == null) return;
-            Filefinder.preferences.toolbar_shotcuts = cb_thotkey.active;
-            Filefinder.preferences.is_changed = true;
+        cb_thotkey.activated.connect (()=>{
+            // if (Filefinder.preferences == null) return;
+            // Filefinder.preferences.toolbar_shotcuts = cb_thotkey.active;
+            // Filefinder.preferences.is_changed = true;
         });
 
-        Gtk.Label label = new Label ("<b>Extension Manager</b>");
-        label.use_markup = true;
-        label.xalign = 0;
-        box.add (label);
+        Adw.PreferencesGroup group_d = new Adw.PreferencesGroup ();
+        group_d.set_title ("Extension Manager");
+        this.add (group_d);
 
         Gtk.Box hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        box.pack_start (hbox, true, true, 0);
+        group_d.add (hbox);
 
-        ScrolledWindow scroll = new ScrolledWindow (null, null);
-        scroll.shadow_type = Gtk.ShadowType.OUT;
-        hbox.pack_start (scroll, true, true, 0);
+        Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow ();
+        // scroll.shadow_type = Gtk.ShadowType.OUT;
+        hbox.append (scroll);
 
         view = new Gtk.TreeView ();
+        view.set_hexpand (true);
+        view.set_vexpand (true);
         store = new Gtk.ListStore (4, typeof (bool), typeof (string), typeof (string), typeof (string));
         view.set_model (store);
         Gtk.CellRendererToggle toggle = new Gtk.CellRendererToggle ();
@@ -109,50 +133,53 @@ public class PagePlugin : Gtk.ScrolledWindow {
         view.insert_column_with_attributes (-1, "Description", new Gtk.CellRendererText (), "text", 3, null);
         view.get_column (3).visible = false;
         view.set_tooltip_column (3);
-        scroll.add (view);
+        scroll.set_child (view);
         view.get_selection ().changed.connect (on_selection);
 
         Gtk.Box vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        hbox.pack_start (vbox, false, false, 0);
+        hbox.append (vbox);
 
         Gtk.Button button = new Gtk.Button.with_label ("New");
         button.tooltip_text = "Add New Extension From Template";
         button.clicked.connect (()=>{
-            var d = new InputDialog (Filefinder.preferences);
+            var d = new InputDialog (Filefinder.window);
             d.label.label = "Input a new extension file name";
             d.entry.text = "my_extension";
-            int r = d.run ();
-            string pname = d.entry.text.down().strip ().replace (" ", "_");
-            pname = pname.replace ("/", "_");
-            pname = pname.replace ("\"", "");
-            pname = pname.replace ("?", "");
-            pname = pname.replace (":", "_");
-            pname = pname.replace ("\\", "_");
-            d.destroy ();
-            if (r == Gtk.ResponseType.ACCEPT) {
-                if (pname.length > 0) {
-                    File? plug = Filefinder.preferences.create_plug (pname);
-                    if (plug != null) {
-                        List<File> flist = new List<File> ();
-                        flist.append (plug);
-                        AppInfo app = GLib.AppInfo.get_default_for_type ("application/x-shellscript", false);
-                        if (app != null) {
-                            try {
-                                app.launch (flist, null);
-                                reload ();
-                            } catch (Error e) {
-                                var dlg = new Gtk.MessageDialog (Filefinder.window, 0,
-                                    Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, "Failed to launch: %s",
-                                    e.message);
-                                dlg.run ();
-                                dlg.destroy ();
+            d.set_modal (true);
+            d.present ();
+            d.response.connect ((response_id) => {
+                if (response_id == Gtk.ResponseType.ACCEPT) {
+                    string pname = d.entry.text.down().strip ().replace (" ", "_");
+                    pname = pname.replace ("/", "_");
+                    pname = pname.replace ("\"", "");
+                    pname = pname.replace ("?", "");
+                    pname = pname.replace (":", "_");
+                    pname = pname.replace ("\\", "_");
+                    if (pname.length > 0) {
+                        File? plug = Filefinder.preferences.create_plug (pname);
+                        if (plug != null) {
+                            List<File> flist = new List<File> ();
+                            flist.append (plug);
+                            AppInfo app = GLib.AppInfo.get_default_for_type ("application/x-shellscript", false);
+                            if (app != null) {
+                                try {
+                                    app.launch (flist, null);
+                                    reload ();
+                                } catch (Error e) {
+                                    var dlg = new Gtk.MessageDialog (Filefinder.window, 0,
+                                        Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, "Failed to launch: %s",
+                                        e.message);
+                                    dlg.present ();
+                                    dlg.destroy ();
+                                }
                             }
                         }
                     }
                 }
-            }
+                d.destroy ();
+            });
         });
-        vbox.add (button);
+        vbox.append (button);
 
         button = new Gtk.Button.with_label ("Edit");
         button.tooltip_text = "Edit Selected Extension";
@@ -169,63 +196,73 @@ public class PagePlugin : Gtk.ScrolledWindow {
                     var dlg = new Gtk.MessageDialog (Filefinder.window, 0,
                         Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, "Failed to launch: %s",
                         e.message);
-                    dlg.run ();
+                    dlg.present ();
                     dlg.destroy ();
                 }
             }
         });
-        vbox.add (button);
+        vbox.append (button);
 
-        vbox.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        vbox.append (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         button = new Gtk.Button.with_label ("Install");
         button.tooltip_text = "Install Extensions From Drive";
         button.clicked.connect (()=>{
-            Gtk.FileChooserDialog c = new Gtk.FileChooserDialog ("Select Extensions",
-                                                                Filefinder.window,
-                                                                Gtk.FileChooserAction.OPEN,
-                                                                "_Cancel",
-                                                                Gtk.ResponseType.CANCEL,
-                                                                "_Select",
-                                                                Gtk.ResponseType.ACCEPT);
-            c.select_multiple = true;
-            Gtk.FileFilter filter_text = new FileFilter ();
+            Gtk.FileDialog c = new Gtk.FileDialog ();
+            c.set_title ("Select Extensions");
+            Gtk.FileFilter filter_text = new Gtk.FileFilter ();
             filter_text.set_filter_name ("Shell Script");
             filter_text.add_mime_type ("application/x-shellscript");
-            c.set_filter (filter_text);
-            if (c.run () == Gtk.ResponseType.ACCEPT) {
-                install (c.get_filenames ());
-                reload ();
-            }
-            c.destroy ();
+            c.set_default_filter (filter_text);
+            // c.set_initial_folder (GLib.File.new_for_path (location.folder));
+            c.open_multiple.begin (Filefinder.window, null, (obj, res) => {
+                try {
+                    GLib.ListModel mfiles = c.open_multiple.end (res);
+                    if (mfiles != null) {
+                        GLib.SList<string> filenames = new GLib.SList<string> ();
+                        uint n_files = mfiles.get_n_items ();
+                        for (uint n = 0; n < n_files; n++) {
+                            GLib.File file = (GLib.File) mfiles.get_item (n);
+                            filenames.append (file.get_path ());
+                        };
+                        install (filenames);
+                        reload ();
+                    }
+                } catch (Error error) {
+                    // stdout.printf ("Could not open file: %s\n", error.message);
+                }
+            });
         });
-        vbox.add (button);
+        vbox.append (button);
 
         button = new Gtk.Button.with_label ("Delete");
         button.tooltip_text = "Delete Selected Extensions";
         button.clicked.connect (()=>{
             if (selection == -1) return;
-            ResultsView.delete_file (File.new_for_path (Filefinder.preferences.plugins.nth_data (selection).uri));
+            // ResultsView.delete_file (File.new_for_path (Filefinder.preferences.plugins.nth_data (selection).uri));
             reload ();
         });
-        vbox.add (button);
+        vbox.append (button);
     }
 
     public void reload () {
-        TreeIter it;
+print ("Reload .......\n");
+        Gtk.TreeIter it;
         if (Filefinder.preferences == null) return;
         Filefinder.preferences.load_plugs ();
+print ("N plugins: %u\n", Filefinder.preferences.plugins.length ());
         store.clear ();
         foreach (Plugin p in Filefinder.preferences.plugins) {
             store.append (out it);
-            store.set (it, 
+            store.set (it,
                        0, p.default_action,
                        1, p.label,
                        2, p.hotkey,
                        3, p.description, -1);
+print(p.label+"\n");
         }
-        cb_toolbar.active = Filefinder.preferences.show_toolbar;
-        cb_tgroups.active = Filefinder.preferences.toolbar_groups;
-        cb_thotkey.active = Filefinder.preferences.toolbar_shotcuts;
+        // cb_toolbar.active = Filefinder.preferences.show_toolbar;
+        // cb_tgroups.active = Filefinder.preferences.toolbar_groups;
+        // cb_thotkey.active = Filefinder.preferences.toolbar_shotcuts;
     }
 
     private void on_selection () {
@@ -240,13 +277,14 @@ public class PagePlugin : Gtk.ScrolledWindow {
     private bool skip_all;
     private bool replace_all;
 
+    // TODO: check i realy work all
     private void install (SList<string> list) {
         File f1, f2;
         string path = Path.build_filename (Environment.get_user_data_dir (),
                                             "filefinder", "extensions");
         f2 = File.new_for_path (path);
         if (!f2.query_exists ())
-            DirUtils.create (path, 0744);
+            DirUtils.create_with_parents (path, 0744);
         replace_all = skip_all = false;
         foreach (string s in list) {
             f1 = File.new_for_path (s);
@@ -261,23 +299,25 @@ public class PagePlugin : Gtk.ScrolledWindow {
                                  "Replace All", Gtk.ResponseType.ACCEPT + 100,
                                  "Skip", Gtk.ResponseType.CANCEL,
                                  "Replace", Gtk.ResponseType.ACCEPT);
-                int r = dlg.run ();
-                dlg.destroy ();
-                switch (r) {
-                    case Gtk.ResponseType.CANCEL:
-                        continue;
-                    case Gtk.ResponseType.ACCEPT + 100:
-                        replace_all = true;
-                        break;
-                    case Gtk.ResponseType.CANCEL + 100:
-                        skip_all = true;
-                        continue;
-                }
+                dlg.present ();
+                dlg.response.connect ((response_id) => {
+                    switch (response_id) {
+                        case Gtk.ResponseType.CANCEL:
+                            break;
+                        case Gtk.ResponseType.ACCEPT + 100:
+                            replace_all = true;
+                            break;
+                        case Gtk.ResponseType.CANCEL + 100:
+                            skip_all = true;
+                            break;
+                    }
+                    dlg.destroy ();
+                });
             }
             if (f2.query_exists ()) {
-                if (!ResultsView.delete_file (f2)) {
-                    continue;
-                }
+                // if (!ResultsView.delete_file (f2)) {
+                //     continue;
+                // }
             }
             try {
                 f1.copy (f2, 0, null, null);
