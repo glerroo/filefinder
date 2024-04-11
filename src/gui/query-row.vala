@@ -282,13 +282,13 @@ public class QueryRow : Gtk.Box {
                 hbox.append (w_combo);
                 w_combo.changed.connect (() => {
                     size.size = uint64.parse (size_entry.text) *
-                                        size.WEIGHT[w_combo.active];
+                                        FilterSize.WEIGHT[w_combo.active];
                 });
                 size_entry.changed.connect (()=>{
                     // size_entry.text = check_dec (size_entry.text);
                     GLib.Idle.add (check_dec);
                     size.size = uint64.parse (size_entry.text) *
-                                        size.WEIGHT[w_combo.active];
+                                        FilterSize.WEIGHT[w_combo.active];
                     size_entry.tooltip_text = size_entry.text;
                 });
                 size_entry.activate.connect (()=>{search ();});
